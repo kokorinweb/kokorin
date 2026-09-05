@@ -1,0 +1,57 @@
+---
+import { cases } from '../data/content';
+import SectionHead from './SectionHead.astro';
+---
+
+<section id="cases" class="relative overflow-clip py-24 sm:py-32">
+  <div class="aura top-1/4 left-1/2 size-[40rem] -translate-x-1/2 bg-violet-600/8" aria-hidden="true"></div>
+  <div class="container-page relative">
+    <SectionHead eyebrow={cases.eyebrow} title={cases.title} subtitle={cases.subtitle} />
+
+    <div class="mt-14 flex flex-col gap-5">
+      {
+        cases.items.map((item, i) => (
+          <article
+            class="reveal card-glass group grid gap-8 p-7 sm:p-10 lg:grid-cols-[1.6fr_1fr] lg:items-center"
+            style={`--reveal-delay:${i * 100}ms`}
+          >
+            <div>
+              <div class="flex flex-wrap items-center gap-3">
+                <h3 class="font-display text-2xl text-mist-50 sm:text-3xl">{item.client}</h3>
+                <span class="rounded-pill border border-white/8 bg-white/[0.03] px-3 py-1 text-xs text-mist-500">
+                  {item.industry}
+                </span>
+              </div>
+
+              <dl class="mt-6 flex flex-col gap-4">
+                <div class="border-l-2 border-white/10 pl-4">
+                  <dt class="text-xs tracking-widest text-mist-500 uppercase">Было</dt>
+                  <dd class="mt-1 text-sm leading-relaxed text-mist-300 sm:text-base">{item.task}</dd>
+                </div>
+                <div
+                  class={`border-l-2 pl-4 ${item.accent === 'violet' ? 'border-violet-500/60' : 'border-gold-500/60'}`}
+                >
+                  <dt class="text-xs tracking-widest text-mist-500 uppercase">Что сделал</dt>
+                  <dd class="mt-1 text-sm leading-relaxed text-mist-100 sm:text-base">{item.result}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/8 bg-white/8 lg:grid-cols-1">
+              {item.stats.map((s) => (
+                <div class="bg-ink-900/80 px-5 py-6 text-center lg:text-left">
+                  <p
+                    class={`font-display text-3xl sm:text-4xl ${item.accent === 'violet' ? 'text-violet-500' : 'text-gold-500'}`}
+                  >
+                    {s.value}
+                  </p>
+                  <p class="mt-1 text-xs text-mist-500 sm:text-sm">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

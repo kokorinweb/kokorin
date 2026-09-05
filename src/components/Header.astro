@@ -1,0 +1,105 @@
+---
+import { nav, site } from '../data/content';
+import Icon from './Icon.astro';
+---
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+>
+  <div class="container-page">
+    <div
+      id="header-shell"
+      class="mt-4 flex items-center justify-between gap-6 rounded-pill border border-transparent px-5 py-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+    >
+      <a href="#top" class="font-display text-lg font-semibold tracking-tight text-mist-50">
+        {site.name}<span class="text-gold-500">.</span>
+      </a>
+
+      <nav aria-label="Основная навигация" class="hidden items-center gap-8 lg:flex">
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              class="text-sm text-mist-300 transition-colors duration-300 hover:text-mist-50"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a
+          href="#contact"
+          class="hidden rounded-pill bg-gold-500 px-5 py-2.5 text-sm font-semibold text-ink-950 transition-transform duration-300 hover:scale-[1.03] sm:inline-flex"
+        >
+          Обсудить проект
+        </a>
+        <button
+          id="nav-toggle"
+          type="button"
+          aria-label="Открыть меню"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          class="grid size-10 place-items-center rounded-full border border-white/10 text-mist-100 lg:hidden"
+        >
+          <Icon name="plus" class="size-5 transition-transform duration-300" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="mobile-nav"
+    hidden
+    class="container-page lg:hidden"
+  >
+    <nav class="mt-2 flex flex-col gap-1 rounded-card border border-white/10 bg-ink-900/95 p-3 backdrop-blur-xl">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-xl px-4 py-3 text-base text-mist-200 transition-colors hover:bg-white/5 hover:text-mist-50"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href="#contact"
+        class="mt-1 rounded-xl bg-gold-500 px-4 py-3 text-center font-semibold text-ink-950"
+      >
+        Обсудить проект
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const shell = document.getElementById('header-shell');
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-nav');
+
+  const compact =
+    'border-white/10 bg-ink-900/70 backdrop-blur-xl shadow-[0_18px_50px_-30px_rgba(0,0,0,0.9)]'.split(' ');
+
+  const onScroll = () => {
+    if (!shell) return;
+    shell.classList.toggle('border-white/10', window.scrollY > 24);
+    compact.forEach((c) => shell.classList.toggle(c, window.scrollY > 24));
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setMenu = (open: boolean) => {
+    if (!menu || !toggle) return;
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    toggle.querySelector('svg')?.classList.toggle('rotate-45', open);
+  };
+
+  toggle?.addEventListener('click', () => setMenu(Boolean(menu?.hidden ?? true)));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+</script>

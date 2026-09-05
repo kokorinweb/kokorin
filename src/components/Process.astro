@@ -1,0 +1,41 @@
+---
+import { process } from '../data/content';
+import SectionHead from './SectionHead.astro';
+---
+
+<section id="process" class="relative py-24 sm:py-32">
+  <div class="container-page">
+    <SectionHead
+      eyebrow={process.eyebrow}
+      title={process.title}
+      subtitle={process.subtitle}
+      align="left"
+    />
+
+    <ol class="relative mt-16 grid gap-10 lg:grid-cols-4 lg:gap-6">
+      <!-- Соединительная линия на десктопе -->
+      <div
+        class="absolute top-6 right-0 left-0 hidden h-px bg-gradient-to-r from-transparent via-white/12 to-transparent lg:block"
+        aria-hidden="true"
+      >
+      </div>
+
+      {
+        process.steps.map((step, i) => (
+          <li class="reveal relative" style={`--reveal-delay:${i * 110}ms`}>
+            <div class="flex items-center gap-4 lg:block">
+              <span class="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border border-gold-500/30 bg-ink-950 font-display text-sm text-gold-400">
+                {step.n}
+              </span>
+              <span class="rounded-pill border border-white/8 bg-white/[0.03] px-3 py-1 text-xs text-mist-500 lg:mt-6 lg:inline-block">
+                {step.days}
+              </span>
+            </div>
+            <h3 class="mt-5 text-xl text-mist-50">{step.title}</h3>
+            <p class="mt-2.5 text-sm leading-relaxed text-mist-300">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

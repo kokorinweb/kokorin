@@ -1,0 +1,118 @@
+---
+import { hero } from '../data/content';
+import Icon from './Icon.astro';
+---
+
+<section id="top" class="relative isolate overflow-hidden pt-44 pb-20 sm:pt-48 lg:pt-52">
+  <!-- Свечения и сетка -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="aura -top-40 left-1/2 size-[46rem] -translate-x-1/2 bg-gold-600/18"></div>
+    <div class="aura top-40 -left-40 size-[32rem] bg-violet-600/16"></div>
+    <div class="aura top-20 -right-32 size-[28rem] bg-gold-500/10"></div>
+    <div
+      class="absolute inset-0 opacity-[0.14] [background-image:linear-gradient(to_right,rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:radial-gradient(ellipse_75%_55%_at_50%_10%,#000,transparent)]"
+    >
+    </div>
+  </div>
+
+  <div class="container-page flex flex-col items-center text-center">
+    <span
+      class="reveal inline-flex items-center gap-2.5 rounded-pill border border-gold-500/25 bg-gold-500/[0.07] px-4 py-2 text-xs font-medium tracking-wide text-gold-400 sm:text-sm"
+    >
+      <span class="relative flex size-2">
+        <span class="absolute inline-flex size-full animate-ping rounded-full bg-gold-500 opacity-70"></span>
+        <span class="relative inline-flex size-2 rounded-full bg-gold-500"></span>
+      </span>
+      {hero.badge}
+    </span>
+
+    <h1
+      class="reveal mt-8 w-full max-w-5xl text-[clamp(1.75rem,7.2vw,2.75rem)] leading-[1.05] text-mist-50 sm:text-6xl sm:leading-[1.02] lg:text-[5rem]"
+      style="--reveal-delay:100ms"
+    >
+      {hero.titleTop}<br class="hidden sm:block" />{' '}
+      <span class="text-gradient-gold">{hero.titleAccent}</span>,
+      <span class="mt-1 block text-[0.66em] text-mist-500 sm:mt-3">{hero.titleBottom}</span>
+    </h1>
+
+    <p
+      class="reveal mt-7 w-full max-w-2xl text-base leading-relaxed text-mist-300 sm:text-lg"
+      style="--reveal-delay:200ms"
+    >
+      {hero.subtitle}
+    </p>
+
+    <div class="reveal mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" style="--reveal-delay:300ms">
+      <a
+        href={hero.primaryCta.href}
+        class="group glow-gold inline-flex items-center justify-center gap-2 rounded-pill bg-gold-500 px-7 py-4 font-semibold text-ink-950 transition-all duration-300 hover:scale-[1.03] hover:bg-gold-400"
+      >
+        {hero.primaryCta.label}
+        <Icon name="arrow" class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+      </a>
+      <a
+        href={hero.secondaryCta.href}
+        class="inline-flex items-center justify-center gap-2 rounded-pill border border-white/12 px-7 py-4 font-medium text-mist-100 transition-colors duration-300 hover:border-white/25 hover:bg-white/5"
+      >
+        {hero.secondaryCta.label}
+      </a>
+    </div>
+
+    <!-- Метрики -->
+    <dl
+      class="reveal mt-16 grid w-full max-w-4xl grid-cols-2 gap-px overflow-hidden rounded-card border border-white/8 bg-white/8 lg:grid-cols-4"
+      style="--reveal-delay:400ms"
+    >
+      {
+        hero.metrics.map((m) => (
+          <div class="flex flex-col items-center gap-1.5 bg-ink-950/85 px-4 py-7 backdrop-blur-sm">
+            <dt class="sr-only">{m.label}</dt>
+            <dd class="font-display text-3xl text-mist-50 sm:text-4xl">
+              <span class="counter" data-to={m.value}>0</span>{m.suffix}
+            </dd>
+            <p class="text-xs text-mist-500 sm:text-sm">{m.label}</p>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<script>
+  const counters = document.querySelectorAll<HTMLElement>('.counter');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const format = (n: number, decimals: number) =>
+    n.toFixed(decimals).replace('.', ',');
+
+  const run = (el: HTMLElement) => {
+    const to = Number(el.dataset.to ?? 0);
+    const decimals = (el.dataset.to ?? '').includes('.') ? 1 : 0;
+    if (reduce) {
+      el.textContent = format(to, decimals);
+      return;
+    }
+    const duration = 1400;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = format(to * eased, decimals);
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        run(entry.target as HTMLElement);
+        io.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.6 },
+  );
+
+  counters.forEach((c) => io.observe(c));
+</script>
