@@ -166,13 +166,21 @@
 
 /* Появление при скролле — включается классом .is-in из scroll-reveal.js */
 @utility reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity 0.9s var(--ease-out-soft),
-    transform 0.9s var(--ease-out-soft);
-  transition-delay: var(--reveal-delay, 0ms);
-  &.is-in {
+  /* По умолчанию блок виден: без JS страница читается целиком */
+  opacity: 1;
+  transform: none;
+
+  /* Прячем под анимацию только когда скрипт успел объявить о себе */
+  :root.js & {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s var(--ease-out-soft),
+      transform 0.9s var(--ease-out-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  :root.js &.is-in {
     opacity: 1;
     transform: none;
   }

@@ -26,6 +26,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
+    <!-- Ставится до отрисовки: без JS блоки .reveal остаются видимыми -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:title" content={title} />

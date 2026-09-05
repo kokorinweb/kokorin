@@ -68,7 +68,7 @@ import Icon from './Icon.astro';
             <dd class="font-display text-4xl text-mist-50">
               {m.prefix && <span class="text-2xl text-mist-500">{m.prefix}</span>}
               <span class="counter" data-to={m.value} data-pad={m.pad ? '2' : '0'}>
-                0
+                {m.pad ? String(m.value).padStart(2, '0') : m.value}
               </span>
               {m.suffix}
             </dd>

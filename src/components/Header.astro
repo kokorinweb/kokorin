@@ -10,7 +10,7 @@ import Icon from './Icon.astro';
   <div class="container-page">
     <div
       id="header-shell"
-      class="mt-4 flex items-center justify-between gap-6 rounded-pill border border-transparent px-5 py-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      class="relative mt-4 flex items-center justify-between gap-6 rounded-pill border border-transparent px-5 py-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
     >
       <a href="#top" class="font-display text-base font-semibold tracking-[0.06em] text-mist-50 sm:text-lg">
         {site.name}
@@ -36,70 +36,69 @@ import Icon from './Icon.astro';
         >
           Обсудить проект
         </a>
-        <button
-          id="nav-toggle"
-          type="button"
-          aria-label="Открыть меню"
-          aria-expanded="false"
-          aria-controls="mobile-nav"
-          class="grid size-10 place-items-center rounded-full border border-white/10 text-mist-100 lg:hidden"
-        >
-          <Icon name="plus" class="size-5 transition-transform duration-300" />
-        </button>
+
+        <!-- details вместо кнопки: меню открывается и без JS -->
+        <details id="mobile-nav" class="group lg:hidden">
+          <summary
+            aria-label="Меню"
+            class="grid size-10 cursor-pointer place-items-center rounded-full border border-white/10 text-mist-100"
+          >
+            <Icon name="plus" class="size-5 transition-transform duration-300 group-open:rotate-45" />
+          </summary>
+
+          <nav
+            aria-label="Мобильное меню"
+            class="absolute inset-x-0 top-full mt-2 flex flex-col gap-1 rounded-card border border-white/10 bg-ink-900/95 p-3 backdrop-blur-xl"
+          >
+            {
+              nav.map((item) => (
+                <a
+                  href={item.href}
+                  class="rounded-xl px-4 py-3 text-base tracking-wide text-mist-200 uppercase transition-colors hover:bg-white/5 hover:text-mist-50"
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+            <a
+              href="#brief"
+              class="mt-1 rounded-xl bg-gold-500 px-4 py-3 text-center font-semibold tracking-wide text-ink-950 uppercase"
+            >
+              Обсудить проект
+            </a>
+          </nav>
+        </details>
       </div>
     </div>
   </div>
-
-  <div
-    id="mobile-nav"
-    hidden
-    class="container-page lg:hidden"
-  >
-    <nav class="mt-2 flex flex-col gap-1 rounded-card border border-white/10 bg-ink-900/95 p-3 backdrop-blur-xl">
-      {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class="rounded-xl px-4 py-3 text-base tracking-wide text-mist-200 uppercase transition-colors hover:bg-white/5 hover:text-mist-50"
-          >
-            {item.label}
-          </a>
-        ))
-      }
-      <a
-        href="#brief"
-        class="mt-1 rounded-xl bg-gold-500 px-4 py-3 text-center font-semibold tracking-wide text-ink-950 uppercase"
-      >
-        Обсудить проект
-      </a>
-    </nav>
-  </div>
 </header>
+
+<style>
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary {
+    list-style: none;
+  }
+</style>
 
 <script>
   const shell = document.getElementById('header-shell');
-  const toggle = document.getElementById('nav-toggle');
-  const menu = document.getElementById('mobile-nav');
+  const menu = document.getElementById('mobile-nav') as HTMLDetailsElement | null;
 
   const compact =
     'border-white/10 bg-ink-900/70 backdrop-blur-xl shadow-[0_18px_50px_-30px_rgba(0,0,0,0.9)]'.split(' ');
 
   const onScroll = () => {
     if (!shell) return;
-    shell.classList.toggle('border-white/10', window.scrollY > 24);
     compact.forEach((c) => shell.classList.toggle(c, window.scrollY > 24));
   };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  const setMenu = (open: boolean) => {
-    if (!menu || !toggle) return;
-    menu.hidden = !open;
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
-    toggle.querySelector('svg')?.classList.toggle('rotate-45', open);
-  };
-
-  toggle?.addEventListener('click', () => setMenu(Boolean(menu?.hidden ?? true)));
-  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  menu?.querySelectorAll('nav a').forEach((a) =>
+    a.addEventListener('click', () => {
+      menu.open = false;
+    }),
+  );
 </script>
