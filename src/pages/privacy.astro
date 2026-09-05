@@ -1,30 +1,26 @@
 ---
-import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Legal from '../layouts/Legal.astro';
 import { site } from '../data/content';
 ---
 
-<Base title={`Политика конфиденциальности — ${site.name}`} description="Политика обработки персональных данных.">
-  <Header />
-  <main id="main" class="container-page pt-36 pb-24 sm:pt-44">
-    <div class="mx-auto flex max-w-2xl flex-col gap-5">
-      <h1 class="text-4xl text-mist-50 sm:text-5xl">Политика конфиденциальности</h1>
-      <p class="text-mist-300">
-        Персональные данные, оставленные в форме на сайте (имя, телефон, Telegram, e-mail, описание
-        задачи), используются исключительно для связи по вашему обращению и подготовки коммерческого
-        предложения.
-      </p>
-      <p class="text-mist-300">
-        Данные не передаются третьим лицам, кроме сервисов, обеспечивающих работу сайта и приём
-        заявок. Хранятся до момента отзыва согласия.
-      </p>
-      <p class="text-mist-300">
-        Чтобы отозвать согласие и удалить данные, напишите на
-        <a href={`mailto:${site.email}`} class="text-gold-400 underline underline-offset-2">{site.email}</a>.
-      </p>
-      <a href="/" class="mt-4 text-sm text-mist-500 transition-colors hover:text-mist-100">&larr; На главную</a>
-    </div>
-  </main>
-  <Footer />
-</Base>
+<Legal
+  title={`Политика конфиденциальности — ${site.name}`}
+  heading="Политика конфиденциальности"
+  description="Политика обработки персональных данных."
+>
+  <p class="text-mist-300">
+    Персональные данные, оставленные в форме на сайте (Telegram, описание задачи и выбранные
+    варианты ответов), используются исключительно для связи по вашему обращению и подготовки
+    предложения по проекту.
+  </p>
+  <p class="text-mist-300">
+    Данные не передаются третьим лицам, кроме сервисов, обеспечивающих работу сайта и приём заявок.
+    Хранятся до момента отзыва согласия.
+  </p>
+  <p class="text-mist-300">
+    Чтобы отозвать согласие и удалить данные, напишите на
+    <a href={site.email.href} class="text-gold-400 underline underline-offset-2">{site.email.handle}</a>
+    или в Telegram
+    <a href={site.telegram.href} class="text-gold-400 underline underline-offset-2">{site.telegram.handle}</a>.
+  </p>
+</Legal>

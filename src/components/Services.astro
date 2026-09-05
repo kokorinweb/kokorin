@@ -7,33 +7,70 @@ import Icon from './Icon.astro';
 <section id="services" class="relative overflow-clip py-24 sm:py-32">
   <div class="aura top-0 right-0 size-[34rem] bg-gold-600/10" aria-hidden="true"></div>
   <div class="container-page relative">
-    <SectionHead eyebrow={services.eyebrow} title={services.title} subtitle={services.subtitle} />
+    <SectionHead
+      num={services.num}
+      eyebrow={services.eyebrow}
+      title={services.title}
+      subtitle={services.subtitle}
+    />
 
     <div class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
         services.items.map((item, i) => (
           <article
-            class="reveal card-glass card-hover flex flex-col p-7"
+            class:list={[
+              'reveal card-glass card-hover group flex flex-col p-7',
+              i === services.items.length - 1 && 'md:col-span-2 lg:col-span-3',
+            ]}
             style={`--reveal-delay:${(i % 3) * 90}ms`}
           >
-            <span class="grid size-12 place-items-center rounded-2xl border border-gold-500/20 bg-gold-500/8 text-gold-400">
-              <Icon name={item.icon} class="size-6" />
-            </span>
+            <div class="flex items-center justify-between">
+              <span class="grid size-12 place-items-center rounded-2xl border border-gold-500/20 bg-gold-500/8 text-gold-400">
+                <Icon name={item.icon} class="size-6" />
+              </span>
+              <span class="font-display text-sm text-mist-500 transition-colors duration-300 group-hover:text-gold-500">
+                {item.n}
+              </span>
+            </div>
 
             <h3 class="mt-6 text-xl text-mist-50">{item.title}</h3>
-            <p class="mt-3 grow text-sm leading-relaxed text-mist-300">{item.text}</p>
 
-            <ul class="mt-6 flex flex-col gap-2 border-t border-white/6 pt-5">
-              {item.bullets.map((b) => (
-                <li class="flex items-center gap-2.5 text-sm text-mist-300">
-                  <Icon name="check" class="size-4 shrink-0 text-gold-500" />
-                  {b}
-                </li>
-              ))}
-            </ul>
+            {item.text && <p class="mt-3 grow max-w-2xl text-sm leading-relaxed text-mist-300">{item.text}</p>}
+
+            {item.bullets && (
+              <div class="mt-3 grow">
+                <p class="text-sm text-mist-300">{item.lead}</p>
+                <ul class="mt-3 flex flex-col gap-2">
+                  {item.bullets.map((b) => (
+                    <li class="flex items-center gap-2.5 text-sm text-mist-300">
+                      <Icon name="check" class="size-4 shrink-0 text-gold-500" />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <a
+              href="#brief"
+              class="mt-6 inline-flex items-center gap-2 border-t border-white/6 pt-5 text-sm text-mist-500 transition-colors duration-300 group-hover:text-gold-400"
+            >
+              Подробнее
+              <Icon name="arrow" class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
           </article>
         ))
       }
+    </div>
+
+    <div class="reveal mt-12 flex justify-center">
+      <a
+        href={services.cta.href}
+        class="group inline-flex items-center gap-2 rounded-pill border border-gold-500/30 bg-gold-500/[0.06] px-8 py-4 font-semibold tracking-wide text-gold-400 uppercase transition-all duration-300 hover:border-gold-500/60 hover:bg-gold-500/12"
+      >
+        {services.cta.label}
+        <Icon name="arrow" class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+      </a>
     </div>
   </div>
 </section>

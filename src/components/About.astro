@@ -1,59 +1,76 @@
 ---
 import { about } from '../data/content';
+import Icon from './Icon.astro';
 ---
 
 <section id="about" class="relative overflow-clip py-24 sm:py-32">
   <div class="aura top-10 -right-40 size-[30rem] bg-gold-600/10" aria-hidden="true"></div>
-  <div class="container-page relative grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:items-center lg:gap-20">
-    <!-- Портретная заглушка: замени на реальное фото -->
-    <div class="reveal relative mx-auto w-full max-w-sm lg:mx-0">
-      <div class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-gold-500/20 via-transparent to-violet-600/20 blur-2xl" aria-hidden="true"></div>
-      <div class="relative aspect-4/5 overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-ink-800 to-ink-950">
+
+  <div class="container-page relative">
+    <div class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
+      <!-- Портретная заглушка: замени на реальное фото -->
+      <div class="reveal relative mx-auto w-full max-w-sm lg:mx-0">
         <div
-          class="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_30%_20%,rgba(240,180,41,0.35),transparent_55%),radial-gradient(circle_at_75%_80%,rgba(124,92,255,0.3),transparent_55%)]"
+          class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-gold-500/20 via-transparent to-violet-600/20 blur-2xl"
+          aria-hidden="true"
         >
         </div>
-        <span class="absolute inset-x-0 bottom-0 p-6 font-display text-sm text-mist-500">
-          Фото / портрет
+        <div class="relative aspect-4/5 overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-ink-800 to-ink-950">
+          <div
+            class="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_30%_20%,rgba(240,180,41,0.35),transparent_55%),radial-gradient(circle_at_75%_80%,rgba(124,92,255,0.3),transparent_55%)]"
+          >
+          </div>
+          <span class="absolute inset-x-0 bottom-0 p-6 font-display text-sm text-mist-500">Фото / портрет</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="reveal inline-flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-gold-400 uppercase">
+          <span class="font-display text-mist-500">{about.num}</span>
+          <span class="h-px w-8 bg-gold-500/40"></span>
+          {about.eyebrow}
         </span>
+
+        <h2 class="reveal mt-5 text-4xl text-mist-50 sm:text-5xl lg:text-[3.4rem]" style="--reveal-delay:80ms">
+          <span class="text-mist-500">{about.titleLead}</span>{' '}
+          <span class="text-gradient-gold">{about.titleName}</span>
+        </h2>
+
+        <div class="mt-6 flex flex-col gap-4">
+          {
+            about.paragraphs.map((p, i) => (
+              <p class="reveal text-base leading-relaxed text-mist-300" style={`--reveal-delay:${140 + i * 80}ms`}>
+                {p}
+              </p>
+            ))
+          }
+        </div>
+
+        <div class="reveal mt-9" style="--reveal-delay:320ms">
+          <a
+            href={about.cta.href}
+            class="group inline-flex items-center gap-2 rounded-pill border border-gold-500/30 bg-gold-500/[0.06] px-7 py-3.5 font-medium text-gold-400 transition-all duration-300 hover:border-gold-500/60 hover:bg-gold-500/12"
+          >
+            {about.cta.label}
+            <Icon
+              name="arrowUpRight"
+              class="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </a>
+        </div>
       </div>
     </div>
 
-    <div>
-      <span
-        class="reveal inline-flex items-center gap-2 rounded-pill border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs font-medium tracking-widest text-gold-400 uppercase"
-      >
-        <span class="size-1.5 rounded-full bg-gold-500"></span>
-        {about.eyebrow}
-      </span>
-
-      <h2 class="reveal mt-5 text-4xl text-mist-50 sm:text-5xl" style="--reveal-delay:80ms">
-        {about.title}
-      </h2>
-
-      <div class="mt-6 flex flex-col gap-4">
-        {
-          about.paragraphs.map((p, i) => (
-            <p
-              class="reveal text-base leading-relaxed text-mist-300"
-              style={`--reveal-delay:${140 + i * 80}ms`}
-            >
-              {p}
-            </p>
-          ))
-        }
-      </div>
-
-      <dl class="reveal mt-9 grid grid-cols-3 gap-4" style="--reveal-delay:400ms">
-        {
-          about.facts.map((f) => (
-            <div class="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-5">
-              <dd class="font-display text-2xl text-gold-500">{f.value}</dd>
-              <dt class="mt-1 text-xs leading-snug text-mist-500">{f.label}</dt>
-            </div>
-          ))
-        }
-      </dl>
+    <div class="mt-16 grid gap-4 sm:grid-cols-3">
+      {
+        about.principles.map((p, i) => (
+          <article class="reveal card-glass card-hover p-7" style={`--reveal-delay:${i * 90}ms`}>
+            <Icon name="check" class="size-5 text-gold-500" />
+            <h3 class="mt-4 text-lg text-mist-50">{p.title}</h3>
+            <p class="mt-2.5 text-sm leading-relaxed text-mist-300">{p.text}</p>
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>

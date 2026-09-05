@@ -1,0 +1,279 @@
+---
+import { brief, site } from '../data/content';
+import Icon from './Icon.astro';
+
+const direct = [
+  { icon: 'telegram', label: 'Telegram', handle: site.telegram.handle, href: site.telegram.href },
+  { icon: 'instagram', label: 'Instagram', handle: site.instagram.handle, href: site.instagram.href },
+  { icon: 'mail', label: 'Email', handle: site.email.handle, href: site.email.href },
+];
+---
+
+<section id="brief" class="relative overflow-clip py-24 sm:py-32">
+  <div class="aura bottom-0 left-1/2 size-[42rem] -translate-x-1/2 bg-gold-600/16" aria-hidden="true"></div>
+
+  <div class="container-page relative">
+    <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <!-- Левая колонка: заголовок и прямые контакты -->
+      <div class="lg:sticky lg:top-32 lg:self-start">
+        <span class="reveal inline-flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-gold-400 uppercase">
+          <span class="font-display text-mist-500">{brief.num}</span>
+          <span class="h-px w-8 bg-gold-500/40"></span>
+          {brief.eyebrow}
+        </span>
+
+        <h2 class="reveal mt-5 text-4xl text-mist-50 sm:text-5xl" style="--reveal-delay:80ms">
+          {brief.title}
+        </h2>
+
+        <p class="reveal mt-5 text-base leading-relaxed text-mist-300" style="--reveal-delay:160ms">
+          {brief.subtitle}
+        </p>
+
+        <div class="reveal mt-10" style="--reveal-delay:240ms">
+          <p class="text-sm tracking-wide text-mist-500 uppercase">{brief.directTitle}</p>
+          <div class="mt-4 flex flex-col gap-2">
+            {
+              direct.map((c) => (
+                <a
+                  href={c.href}
+                  target="_blank"
+                  rel="noopener"
+                  class="group flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] px-4 py-3 transition-colors duration-300 hover:border-gold-500/35 hover:bg-gold-500/[0.06]"
+                >
+                  <Icon name={c.icon} class="size-4 shrink-0 text-gold-500" />
+                  <span class="text-sm text-mist-500">{c.label}</span>
+                  <span class="ml-auto text-sm text-mist-100 transition-colors group-hover:text-gold-400">
+                    {c.handle}
+                  </span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Правая колонка: квиз -->
+      <form id="brief-form" class="reveal card-glass flex flex-col gap-9 p-7 sm:p-10" style="--reveal-delay:200ms" novalidate>
+        <!-- Ловушка для ботов -->
+        <input
+          type="text"
+          name="company_website"
+          tabindex="-1"
+          autocomplete="off"
+          class="pointer-events-none absolute size-0 opacity-0"
+          aria-hidden="true"
+        />
+
+        <fieldset>
+          <legend class="flex items-baseline gap-3">
+            <span class="font-display text-sm text-gold-500">{brief.steps.who.n}</span>
+            <span class="text-lg text-mist-50">{brief.steps.who.label}</span>
+          </legend>
+          <div class="mt-5 flex flex-wrap gap-2.5">
+            {
+              brief.steps.who.options.map((option) => (
+                <label class="chip">
+                  <input type="radio" name="who" value={option} class="peer sr-only" />
+                  <span class="chip-face">{option}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span class="font-display text-sm text-gold-500">{brief.steps.what.n}</span>
+            <span class="text-lg text-mist-50">{brief.steps.what.label}</span>
+            <span class="w-full text-xs text-mist-500 sm:w-auto">{brief.steps.what.hint}</span>
+          </legend>
+          <div class="mt-5 flex flex-wrap gap-2.5">
+            {
+              brief.steps.what.options.map((option) => (
+                <label class="chip">
+                  <input type="checkbox" name="what" value={option} class="peer sr-only" />
+                  <span class="chip-face">{option}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <label class="flex flex-col gap-4">
+          <span class="flex items-baseline gap-3">
+            <span class="font-display text-sm text-gold-500">{brief.steps.task.n}</span>
+            <span class="text-lg text-mist-50">{brief.steps.task.label}</span>
+          </span>
+          <textarea
+            name="task"
+            rows="4"
+            placeholder={brief.steps.task.placeholder}
+            class="resize-none rounded-xl border border-white/10 bg-ink-950/60 px-4 py-3.5 text-mist-50 transition-colors placeholder:text-mist-500/60 focus:border-gold-500/50 focus:outline-none"
+          ></textarea>
+        </label>
+
+        <label class="flex flex-col gap-4">
+          <span class="flex items-baseline gap-3">
+            <span class="font-display text-sm text-gold-500">{brief.steps.contact.n}</span>
+            <span class="text-lg text-mist-50">{brief.steps.contact.label}</span>
+          </span>
+          <input
+            type="text"
+            name="contact"
+            required
+            placeholder={brief.steps.contact.placeholder}
+            class="rounded-xl border border-white/10 bg-ink-950/60 px-4 py-3.5 text-mist-50 transition-colors placeholder:text-mist-500/60 focus:border-gold-500/50 focus:outline-none"
+          />
+        </label>
+
+        <label class="flex items-start gap-3 text-sm leading-relaxed text-mist-500">
+          <input
+            type="checkbox"
+            name="consent"
+            required
+            class="consent-box"
+          />
+          <span>
+            {brief.consent}{' '}
+            <a
+              href={brief.consentLink.href}
+              class="text-mist-300 underline decoration-mist-500/40 underline-offset-2 hover:text-gold-400"
+              >{brief.consentLink.label}</a
+            >.
+          </span>
+        </label>
+
+        <button
+          type="submit"
+          class="group glow-gold inline-flex items-center justify-center gap-2 rounded-pill bg-gold-500 px-7 py-4 font-semibold tracking-wide text-ink-950 uppercase transition-all duration-300 hover:scale-[1.02] hover:bg-gold-400 disabled:scale-100 disabled:opacity-60"
+        >
+          {brief.submit}
+          <Icon
+            name="arrowUpRight"
+            class="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          />
+        </button>
+
+        <p id="brief-status" role="status" aria-live="polite" class="hidden text-sm"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Chip-переключатели квиза */
+  .chip-face {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.02);
+    padding: 0.65rem 1.15rem;
+    font-size: 0.875rem;
+    color: var(--color-mist-300);
+    transition:
+      border-color 0.3s var(--ease-out-soft),
+      background 0.3s var(--ease-out-soft),
+      color 0.3s var(--ease-out-soft);
+  }
+  .chip-face:hover {
+    border-color: rgb(255 255 255 / 0.22);
+    color: var(--color-mist-100);
+  }
+  .peer:checked + .chip-face {
+    border-color: rgb(240 180 41 / 0.55);
+    background: rgb(240 180 41 / 0.12);
+    color: var(--color-gold-400);
+  }
+  .peer:focus-visible + .chip-face {
+    outline: 2px solid var(--color-gold-500);
+    outline-offset: 3px;
+  }
+
+  /* Чекбокс согласия: нативный на тёмном фоне почти не виден */
+  .consent-box {
+    appearance: none;
+    flex-shrink: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    background-color: rgb(6 6 10 / 0.6);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 0.7rem;
+    transition:
+      border-color 0.25s var(--ease-out-soft),
+      background-color 0.25s var(--ease-out-soft);
+  }
+  .consent-box:hover {
+    border-color: rgb(255 255 255 / 0.4);
+  }
+  .consent-box:checked {
+    border-color: var(--color-gold-500);
+    background-color: var(--color-gold-500);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306060a' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  }
+</style>
+
+<script>
+  const form = document.getElementById('brief-form') as HTMLFormElement | null;
+  const status = document.getElementById('brief-status');
+
+  const show = (text: string, ok: boolean) => {
+    if (!status) return;
+    status.textContent = text;
+    status.className = `text-sm ${ok ? 'text-gold-400' : 'text-red-400'}`;
+  };
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form) return;
+
+    const data = new FormData(form);
+    if (data.get('company_website')) return; // honeypot
+
+    if (!String(data.get('contact') ?? '').trim()) {
+      show('Оставьте Telegram — без него я не смогу ответить.', false);
+      return;
+    }
+    if (!data.get('consent')) {
+      show('Нужно согласие на обработку персональных данных.', false);
+      return;
+    }
+
+    const payload = {
+      who: data.get('who') ?? '',
+      what: data.getAll('what'),
+      task: data.get('task') ?? '',
+      contact: data.get('contact') ?? '',
+    };
+
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const label = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Отправляю…';
+
+    try {
+      // TODO: подставить реальный endpoint (Telegram-бот, CRM или форм-сервис)
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error(String(response.status));
+
+      form.reset();
+      show('Заявка ушла. Напишу в Telegram.', true);
+    } catch {
+      show('Не получилось отправить. Напишите в Telegram — так быстрее.', false);
+    } finally {
+      button.disabled = false;
+      button.textContent = label;
+    }
+  });
+</script>

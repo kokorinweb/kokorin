@@ -1,0 +1,73 @@
+---
+import { contacts, site } from '../data/content';
+import Icon from './Icon.astro';
+
+const channels = [
+  { icon: 'telegram', label: 'Telegram', handle: site.telegram.handle, href: site.telegram.href },
+  { icon: 'instagram', label: 'Instagram', handle: site.instagram.handle, href: site.instagram.href },
+  { icon: 'mail', label: 'Email', handle: site.email.handle, href: site.email.href },
+];
+---
+
+<section id="contact" class="relative overflow-clip py-24 sm:py-32">
+  <div class="aura top-1/3 left-1/2 size-[36rem] -translate-x-1/2 bg-violet-600/10" aria-hidden="true"></div>
+
+  <div class="container-page relative">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <span class="reveal inline-flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-gold-400 uppercase">
+        <span class="font-display text-mist-500">{contacts.num}</span>
+        <span class="h-px w-8 bg-gold-500/40"></span>
+        {contacts.eyebrow}
+      </span>
+
+      <h2 class="reveal max-w-2xl text-4xl text-mist-50 sm:text-5xl" style="--reveal-delay:80ms">
+        {contacts.title}
+      </h2>
+
+      <p class="reveal max-w-xl text-base leading-relaxed text-mist-300" style="--reveal-delay:160ms">
+        {contacts.subtitle}
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-4 sm:grid-cols-3">
+      {
+        channels.map((c, i) => (
+          <a
+            href={c.href}
+            target="_blank"
+            rel="noopener"
+            class="reveal card-glass card-hover group flex flex-col gap-4 p-7"
+            style={`--reveal-delay:${i * 90}ms`}
+          >
+            <span class="flex items-center justify-between">
+              <span class="grid size-11 place-items-center rounded-2xl border border-gold-500/20 bg-gold-500/8 text-gold-400">
+                <Icon name={c.icon} class="size-5" />
+              </span>
+              <Icon
+                name="arrowUpRight"
+                class="size-4 text-mist-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold-400"
+              />
+            </span>
+            <span>
+              <span class="block text-sm tracking-wide text-mist-500 uppercase">{c.label}</span>
+              <span class="mt-1 block text-base break-all text-mist-50 transition-colors duration-300 group-hover:text-gold-400">
+                {c.handle}
+              </span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    <ul class="reveal mt-10 flex flex-wrap justify-center gap-3">
+      {
+        contacts.badges.map((b) => (
+          <li class="inline-flex items-center gap-2 rounded-pill border border-white/8 bg-white/[0.03] px-4 py-2 text-sm text-mist-300">
+            <Icon name="check" class="size-4 text-gold-500" />
+            {b}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

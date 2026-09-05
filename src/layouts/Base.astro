@@ -43,9 +43,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         name: site.name,
         description: site.description,
         url: `https://${site.domain}`,
-        email: site.email,
-        telephone: site.phone,
+        email: site.email.handle.replace('mailto:', ''),
         areaServed: 'RU',
+        sameAs: [site.telegram.href, site.instagram.href],
       })}
     />
   </head>

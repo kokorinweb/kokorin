@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://kokorin.ru',
+  site: 'https://agency-kokorin.ru',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],

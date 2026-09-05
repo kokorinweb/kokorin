@@ -17,7 +17,7 @@ import Icon from './Icon.astro';
 
   <div class="container-page flex flex-col items-center text-center">
     <span
-      class="reveal inline-flex items-center gap-2.5 rounded-pill border border-gold-500/25 bg-gold-500/[0.07] px-4 py-2 text-xs font-medium tracking-wide text-gold-400 sm:text-sm"
+      class="reveal inline-flex items-center gap-2.5 rounded-pill border border-gold-500/25 bg-gold-500/[0.07] px-4 py-2 text-xs font-medium tracking-[0.18em] text-gold-400 uppercase sm:text-sm"
     >
       <span class="relative flex size-2">
         <span class="absolute inline-flex size-full animate-ping rounded-full bg-gold-500 opacity-70"></span>
@@ -27,12 +27,10 @@ import Icon from './Icon.astro';
     </span>
 
     <h1
-      class="reveal mt-8 w-full max-w-5xl text-[clamp(1.75rem,7.2vw,2.75rem)] leading-[1.05] text-mist-50 sm:text-6xl sm:leading-[1.02] lg:text-[5rem]"
+      class="reveal mt-8 w-full text-[clamp(2.75rem,13vw,9rem)] leading-[0.95] tracking-[-0.04em] text-mist-50"
       style="--reveal-delay:100ms"
     >
-      {hero.titleTop}<br class="hidden sm:block" />{' '}
-      <span class="text-gradient-gold">{hero.titleAccent}</span>,
-      <span class="mt-1 block text-[0.66em] text-mist-500 sm:mt-3">{hero.titleBottom}</span>
+      <span class="text-gradient-gold">{hero.title}</span>
     </h1>
 
     <p
@@ -45,14 +43,14 @@ import Icon from './Icon.astro';
     <div class="reveal mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" style="--reveal-delay:300ms">
       <a
         href={hero.primaryCta.href}
-        class="group glow-gold inline-flex items-center justify-center gap-2 rounded-pill bg-gold-500 px-7 py-4 font-semibold text-ink-950 transition-all duration-300 hover:scale-[1.03] hover:bg-gold-400"
+        class="group glow-gold inline-flex items-center justify-center gap-2 rounded-pill bg-gold-500 px-7 py-4 font-semibold tracking-wide text-ink-950 uppercase transition-all duration-300 hover:scale-[1.03] hover:bg-gold-400"
       >
         {hero.primaryCta.label}
         <Icon name="arrow" class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
       </a>
       <a
         href={hero.secondaryCta.href}
-        class="inline-flex items-center justify-center gap-2 rounded-pill border border-white/12 px-7 py-4 font-medium text-mist-100 transition-colors duration-300 hover:border-white/25 hover:bg-white/5"
+        class="inline-flex items-center justify-center gap-2 rounded-pill border border-white/12 px-7 py-4 font-medium tracking-wide text-mist-100 uppercase transition-colors duration-300 hover:border-white/25 hover:bg-white/5"
       >
         {hero.secondaryCta.label}
       </a>
@@ -60,17 +58,21 @@ import Icon from './Icon.astro';
 
     <!-- Метрики -->
     <dl
-      class="reveal mt-16 grid w-full max-w-4xl grid-cols-2 gap-px overflow-hidden rounded-card border border-white/8 bg-white/8 lg:grid-cols-4"
+      class="reveal mt-16 grid w-full max-w-3xl grid-cols-1 gap-px overflow-hidden rounded-card border border-white/8 bg-white/8 sm:grid-cols-3"
       style="--reveal-delay:400ms"
     >
       {
         hero.metrics.map((m) => (
           <div class="flex flex-col items-center gap-1.5 bg-ink-950/85 px-4 py-7 backdrop-blur-sm">
             <dt class="sr-only">{m.label}</dt>
-            <dd class="font-display text-3xl text-mist-50 sm:text-4xl">
-              <span class="counter" data-to={m.value}>0</span>{m.suffix}
+            <dd class="font-display text-4xl text-mist-50">
+              {m.prefix && <span class="text-2xl text-mist-500">{m.prefix}</span>}
+              <span class="counter" data-to={m.value} data-pad={m.pad ? '2' : '0'}>
+                0
+              </span>
+              {m.suffix}
             </dd>
-            <p class="text-xs text-mist-500 sm:text-sm">{m.label}</p>
+            <p class="text-sm tracking-wide text-mist-500 uppercase">{m.label}</p>
           </div>
         ))
       }
@@ -82,22 +84,23 @@ import Icon from './Icon.astro';
   const counters = document.querySelectorAll<HTMLElement>('.counter');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const format = (n: number, decimals: number) =>
-    n.toFixed(decimals).replace('.', ',');
+  const format = (n: number, pad: number) => {
+    const value = Math.round(n);
+    return pad > 0 ? String(value).padStart(pad, '0') : String(value);
+  };
 
   const run = (el: HTMLElement) => {
     const to = Number(el.dataset.to ?? 0);
-    const decimals = (el.dataset.to ?? '').includes('.') ? 1 : 0;
+    const pad = Number(el.dataset.pad ?? 0);
     if (reduce) {
-      el.textContent = format(to, decimals);
+      el.textContent = format(to, pad);
       return;
     }
     const duration = 1400;
     const start = performance.now();
     const tick = (now: number) => {
       const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = format(to * eased, decimals);
+      el.textContent = format(to * (1 - Math.pow(1 - p, 3)), pad);
       if (p < 1) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);

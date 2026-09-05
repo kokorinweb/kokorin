@@ -12,8 +12,8 @@ import Icon from './Icon.astro';
       id="header-shell"
       class="mt-4 flex items-center justify-between gap-6 rounded-pill border border-transparent px-5 py-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
     >
-      <a href="#top" class="font-display text-lg font-semibold tracking-tight text-mist-50">
-        {site.name}<span class="text-gold-500">.</span>
+      <a href="#top" class="font-display text-base font-semibold tracking-[0.06em] text-mist-50 sm:text-lg">
+        {site.name}
       </a>
 
       <nav aria-label="Основная навигация" class="hidden items-center gap-8 lg:flex">
@@ -21,7 +21,7 @@ import Icon from './Icon.astro';
           nav.map((item) => (
             <a
               href={item.href}
-              class="text-sm text-mist-300 transition-colors duration-300 hover:text-mist-50"
+              class="text-sm tracking-[0.12em] text-mist-300 uppercase transition-colors duration-300 hover:text-mist-50"
             >
               {item.label}
             </a>
@@ -31,8 +31,8 @@ import Icon from './Icon.astro';
 
       <div class="flex items-center gap-3">
         <a
-          href="#contact"
-          class="hidden rounded-pill bg-gold-500 px-5 py-2.5 text-sm font-semibold text-ink-950 transition-transform duration-300 hover:scale-[1.03] sm:inline-flex"
+          href="#brief"
+          class="hidden rounded-pill bg-gold-500 px-5 py-2.5 text-sm font-semibold tracking-wide text-ink-950 uppercase transition-transform duration-300 hover:scale-[1.03] sm:inline-flex"
         >
           Обсудить проект
         </a>
@@ -60,15 +60,15 @@ import Icon from './Icon.astro';
         nav.map((item) => (
           <a
             href={item.href}
-            class="rounded-xl px-4 py-3 text-base text-mist-200 transition-colors hover:bg-white/5 hover:text-mist-50"
+            class="rounded-xl px-4 py-3 text-base tracking-wide text-mist-200 uppercase transition-colors hover:bg-white/5 hover:text-mist-50"
           >
             {item.label}
           </a>
         ))
       }
       <a
-        href="#contact"
-        class="mt-1 rounded-xl bg-gold-500 px-4 py-3 text-center font-semibold text-ink-950"
+        href="#brief"
+        class="mt-1 rounded-xl bg-gold-500 px-4 py-3 text-center font-semibold tracking-wide text-ink-950 uppercase"
       >
         Обсудить проект
       </a>

@@ -1,43 +1,48 @@
 ---
-import { nav, site } from '../data/content';
+import { footer, site } from '../data/content';
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-white/6 py-12">
-  <div class="container-page flex flex-col gap-8">
-    <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+<footer class="relative overflow-clip border-t border-white/6 pt-16 pb-10">
+  <div class="container-page flex flex-col gap-10">
+    <!-- Крупный вординг бренда -->
+    <p
+      class="font-display text-[clamp(2.5rem,12vw,8rem)] leading-none tracking-[-0.05em] text-transparent"
+      style="-webkit-text-stroke: 1px rgba(255,255,255,0.1)"
+      aria-hidden="true"
+    >
+      {site.name}
+    </p>
+
+    <div class="flex flex-col gap-6 border-t border-white/6 pt-8 sm:flex-row sm:items-start sm:justify-between">
       <div class="max-w-xs">
-        <a href="#top" class="font-display text-lg font-semibold text-mist-50">
-          {site.name}<span class="text-gold-500">.</span>
-        </a>
-        <p class="mt-3 text-sm leading-relaxed text-mist-500">
-          Лендинги под трафик: смыслы, дизайн, вёрстка. Два проекта в месяц.
-        </p>
+        <p class="font-display text-base text-mist-50">{site.legalName}</p>
+        <p class="mt-2 text-sm leading-relaxed text-mist-500">{site.tagline}</p>
       </div>
 
-      <nav aria-label="Разделы" class="flex flex-wrap gap-x-8 gap-y-3">
+      <nav aria-label="Документы" class="flex flex-col gap-2">
         {
-          nav.map((item) => (
-            <a href={item.href} class="text-sm text-mist-300 transition-colors hover:text-mist-50">
-              {item.label}
+          footer.links.map((link) => (
+            <a href={link.href} class="text-sm text-mist-300 transition-colors hover:text-mist-50">
+              {link.label}
             </a>
           ))
         }
       </nav>
 
       <div class="flex flex-col gap-2 text-sm">
-        <a href={`mailto:${site.email}`} class="text-mist-300 transition-colors hover:text-mist-50">
-          {site.email}
-        </a>
-        <a href={site.telegram} target="_blank" rel="noopener" class="text-mist-300 transition-colors hover:text-mist-50">
-          Telegram
-        </a>
+        <a
+          href={site.telegram.href}
+          target="_blank"
+          rel="noopener"
+          class="text-mist-300 transition-colors hover:text-mist-50">Telegram {site.telegram.handle}</a
+        >
+        <a href={site.email.href} class="break-all text-mist-300 transition-colors hover:text-mist-50"
+          >{site.email.handle}</a
+        >
       </div>
     </div>
 
-    <div class="flex flex-col gap-3 border-t border-white/6 pt-6 text-xs text-mist-500 sm:flex-row sm:items-center sm:justify-between">
-      <p>&copy; {year} {site.name}. Все права защищены.</p>
-      <a href="/privacy" class="transition-colors hover:text-mist-300">Политика конфиденциальности</a>
-    </div>
+    <p class="text-xs text-mist-500">&copy; {year} {site.legalName}</p>
   </div>
 </footer>

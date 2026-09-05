@@ -1,19 +1,21 @@
 ---
 interface Props {
+  num?: string;
   eyebrow?: string;
   title: string;
   subtitle?: string;
   align?: 'left' | 'center';
 }
-const { eyebrow, title, subtitle, align = 'center' } = Astro.props;
-const alignClass = align === 'center' ? 'text-center mx-auto items-center' : 'text-left items-start';
+const { num, eyebrow, title, subtitle, align = 'center' } = Astro.props;
+const alignClass = align === 'center' ? 'mx-auto items-center text-center' : 'items-start text-left';
 ---
 
 <div class={`flex max-w-3xl flex-col gap-4 ${alignClass}`}>
   {
-    eyebrow && (
-      <span class="reveal inline-flex items-center gap-2 rounded-pill border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs font-medium tracking-widest text-gold-400 uppercase">
-        <span class="size-1.5 rounded-full bg-gold-500" />
+    (num || eyebrow) && (
+      <span class="reveal inline-flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-gold-400 uppercase">
+        {num && <span class="font-display text-mist-500">{num}</span>}
+        {num && eyebrow && <span class="h-px w-8 bg-gold-500/40" />}
         {eyebrow}
       </span>
     )
