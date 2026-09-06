@@ -88,15 +88,32 @@ const wordSeconds = (word: string): number => {
 /** Текст сцены -> слова с флагами и таймингами (секунды от начала сцены). */
 export const tokenize = (text: string, aligned?: AlignedWord[]): Token[] => {
   const tokens: Token[] = [];
+  const segments = splitMarkup(text);
   let markGroup = 0;
   let prevWasMark = false;
 
-  for (const seg of splitMarkup(text)) {
+  segments.forEach((seg, i) => {
     if (seg.mark && !prevWasMark) markGroup++;
     prevWasMark = seg.mark;
 
-    for (const word of seg.text.split(/\s+/)) {
-      if (!word) continue;
+    const words = seg.text.split(/\s+/).filter(Boolean);
+    if (!words.length) return;
+
+    // «**сам**,» — это одно слово с запятой, а не слово и отдельная запятая.
+    // Признак — отсутствие пробела по обе стороны от закрывающей разметки.
+    const prev = segments[i - 1];
+    const glued =
+      i > 0 &&
+      tokens.length > 0 &&
+      prev !== undefined &&
+      !/\s$/.test(prev.text) &&
+      !/^\s/.test(seg.text);
+
+    words.forEach((word, j) => {
+      if (j === 0 && glued) {
+        tokens[tokens.length - 1].text += word;
+        return;
+      }
       tokens.push({
         text: word,
         bold: seg.bold,
@@ -104,8 +121,8 @@ export const tokenize = (text: string, aligned?: AlignedWord[]): Token[] => {
         start: 0,
         end: 0,
       });
-    }
-  }
+    });
+  });
 
   // Тайминги: из выравнивания по звуку, если оно есть, иначе — оценка по буквам.
   let cursor = 0;
@@ -146,22 +163,26 @@ const movable = (group: Token[]): boolean => {
   return last !== undefined && last.mark === null;
 };
 
-/** Пакует предложение в куски по две строки, не разрывая группы подсветки. */
+/**
+ * Пакует предложение в куски по две строки, не разрывая группы подсветки.
+ * Куски выравниваются по длине: жадная набивка оставляла в конце огрызок
+ * вроде «же в каждом новом чате» после почти полной первой строки.
+ */
 const packSentence = (tokens: Token[]): Token[][] => {
+  const width = tokens.reduce((a, t) => a + t.text.length + 1, 0) - 1;
+  const parts = Math.max(1, Math.ceil(width / CHUNK.maxChars));
+  const target = width / parts;
+
   const groups: Token[][] = [];
   let current: Token[] = [];
   let chars = 0;
 
   for (const t of tokens) {
-    const width = chars + t.text.length + (current.length ? 1 : 0);
     const continuesMark =
       current.length > 0 && t.mark !== null && current[current.length - 1].mark === t.mark;
+    const full = chars >= target || current.length >= CHUNK.maxWords;
 
-    if (
-      current.length > 0 &&
-      !continuesMark &&
-      (width > CHUNK.maxChars || current.length >= CHUNK.maxWords)
-    ) {
+    if (current.length > 0 && !continuesMark && full) {
       groups.push(current);
       current = [];
       chars = 0;
