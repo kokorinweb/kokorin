@@ -157,6 +157,16 @@ const bySentence = (tokens: Token[]): Token[][] => {
   return out;
 };
 
+/**
+ * Служебные слова, на которых нельзя обрывать строку: без следующего слова
+ * они не значат ничего, и зритель дочитывает строку впустую.
+ */
+const DANGLING = new Set([
+  'и','а','но','да','или','либо','то','же','ли','не','ни','как','что','чтобы',
+  'в','во','на','за','по','до','от','из','с','со','к','ко','о','об','у','при',
+  'для','про','над','под','без','через','это','этот','эта','эти','тот','та','те',
+]);
+
 /** Слово можно перетащить в соседний кусок, только если оно не в плашке. */
 const movable = (group: Token[]): boolean => {
   const last = group[group.length - 1];
@@ -192,6 +202,17 @@ const packSentence = (tokens: Token[]): Token[][] => {
     chars += t.text.length + (current.length > 1 ? 1 : 0);
   }
   if (current.length) groups.push(current);
+
+  // Строка не должна кончаться предлогом или союзом — уводим его вперёд.
+  for (let i = 0; i < groups.length - 1; i++) {
+    const group = groups[i];
+    const last = group[group.length - 1];
+    if (!last || group.length <= CHUNK.minWords || last.mark !== null) continue;
+    const bare = last.text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+    // Запятая или точка на слове — это уже пауза, обрывать на ней можно.
+    if (bare !== last.text.toLowerCase() || !DANGLING.has(bare)) continue;
+    groups[i + 1].unshift(group.pop() as Token);
+  }
 
   // Хвост из одного слова читается как обрывок — подтягиваем к нему соседей.
   for (let i = groups.length - 1; i > 0; i--) {
