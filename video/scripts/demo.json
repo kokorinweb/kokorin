@@ -1,5 +1,6 @@
 {
-  "mascotPlaceholder": true,
+  "mascot": true,
+  "shirt": "vibe",
   "script": {
     "id": "demo-cheap-ui",
     "title": "Почему интерфейс выглядит дёшево",

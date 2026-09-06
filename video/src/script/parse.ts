@@ -203,9 +203,23 @@ export const buildTimeline = (script: VideoScript): Timeline => {
 
   script.scenes.forEach((scene, index) => {
     const tokens = tokenize(scene.text, scene.words);
-    const chunks = chunkTokens(tokens);
-    const spoken = tokens.length ? tokens[tokens.length - 1].end : 0;
+    let spoken = tokens.length ? tokens[tokens.length - 1].end : 0;
     const seconds = scene.durationInSeconds ?? spoken + PACE.sceneTail;
+
+    // Длительность задана извне (обычно — реальной длиной озвучки),
+    // а тайминги слов оценочные: растягиваем их под звук, иначе субтитр
+    // добежит до конца раньше или позже голоса.
+    if (scene.durationInSeconds && !scene.words && spoken > 0) {
+      const target = Math.max(0.1, scene.durationInSeconds - PACE.sceneTail);
+      const k = target / spoken;
+      tokens.forEach((t) => {
+        t.start *= k;
+        t.end *= k;
+      });
+      spoken = target;
+    }
+
+    const chunks = chunkTokens(tokens);
     const durationInFrames = Math.max(1, Math.round(seconds * fps));
 
     scenes.push({ ...scene, index, from, durationInFrames, chunks });

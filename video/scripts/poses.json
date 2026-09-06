@@ -1,0 +1,116 @@
+{
+  "mascot": true,
+  "shirt": "vibe",
+  "script": {
+    "id": "poses",
+    "title": "Лист поз",
+    "fps": 30,
+    "audio": null,
+    "scenes": [
+      {
+        "text": "==idle==",
+        "pose": "idle",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==point==",
+        "pose": "point",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==shrug==",
+        "pose": "shrug",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==explain==",
+        "pose": "explain",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==think==",
+        "pose": "think",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==stop==",
+        "pose": "stop",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==facepalm==",
+        "pose": "facepalm",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==happy==",
+        "pose": "happy",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==wave==",
+        "pose": "wave",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==thumbup==",
+        "pose": "thumbup",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==victory==",
+        "pose": "victory",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==cross==",
+        "pose": "cross",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      },
+      {
+        "text": "==shock==",
+        "pose": "shock",
+        "durationInSeconds": 1.2,
+        "broll": {
+          "type": "none"
+        }
+      }
+    ]
+  }
+}

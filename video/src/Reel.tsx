@@ -10,11 +10,13 @@ import type { VideoScript } from './script/types';
 
 export type ReelProps = {
   script: VideoScript;
-  /** Рисовать контур на месте персонажа, пока поз нет. */
-  mascotPlaceholder?: boolean;
+  /** Показывать человечка. Выключается для роликов без персонажа. */
+  mascot?: boolean;
+  /** Надпись на его футболке. */
+  shirt?: string;
 };
 
-export const Reel: React.FC<ReelProps> = ({ script, mascotPlaceholder = false }) => {
+export const Reel: React.FC<ReelProps> = ({ script, mascot = true, shirt }) => {
   const timeline = useMemo(() => buildTimeline(script), [script]);
   const frame = useCurrentFrame();
   const active = sceneAt(timeline, frame);
@@ -24,11 +26,9 @@ export const Reel: React.FC<ReelProps> = ({ script, mascotPlaceholder = false })
       <Background />
       {timeline.audio ? <Audio src={staticFile(timeline.audio)} /> : null}
 
-      <Mascot
-        pose={active?.pose}
-        poseChangedAt={active?.from ?? 0}
-        placeholder={mascotPlaceholder}
-      />
+      {mascot ? (
+        <Mascot pose={active?.pose} poseChangedAt={active?.from ?? 0} shirt={shirt} />
+      ) : null}
 
       {timeline.scenes.map((scene) => (
         <Sequence key={scene.index} from={scene.from} durationInFrames={scene.durationInFrames}>
