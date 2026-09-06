@@ -14,7 +14,7 @@ export const COLOR = {
   grid: 'rgba(255, 255, 255, 0.032)',
 
   text: '#FFFFFF',
-  textDim: '#8E949C',
+  textDim: '#A9AFB8',
   textFaint: '#5A5F66',
 
   accent: '#C6F24E',

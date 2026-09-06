@@ -22,7 +22,7 @@ const Word: React.FC<{ token: Token; seconds: number; fps: number }> = ({ token,
       style={{
         color,
         fontWeight: token.bold || marked ? 700 : 600,
-        opacity: 0.34 + appear * 0.66,
+        opacity: 0.5 + appear * 0.5,
         transform: `translateY(${(1 - appear) * 7}px)`,
         display: 'inline-block',
         transition: 'none',

@@ -13,8 +13,10 @@ const PACE = {
 
 /** Сколько влезает в две строки субтитра. */
 const CHUNK = {
-  maxChars: 46,
+  maxChars: 52,
   maxWords: 6,
+  /** Меньше двух слов в куске — сирота, такое дочитывается за кадром. */
+  minWords: 2,
 } as const;
 
 export type Token = {
@@ -123,37 +125,76 @@ export const tokenize = (text: string, aligned?: AlignedWord[]): Token[] => {
   return tokens;
 };
 
-/** Пакует слова в куски по две строки, не разрывая группы подсветки. */
-export const chunkTokens = (tokens: Token[]): Chunk[] => {
-  const chunks: Chunk[] = [];
+/** Режет список слов на предложения — по ним и проходят основные склейки. */
+const bySentence = (tokens: Token[]): Token[][] => {
+  const out: Token[][] = [];
+  let current: Token[] = [];
+  for (const t of tokens) {
+    current.push(t);
+    if (/[.!?…]$/.test(t.text)) {
+      out.push(current);
+      current = [];
+    }
+  }
+  if (current.length) out.push(current);
+  return out;
+};
+
+/** Слово можно перетащить в соседний кусок, только если оно не в плашке. */
+const movable = (group: Token[]): boolean => {
+  const last = group[group.length - 1];
+  return last !== undefined && last.mark === null;
+};
+
+/** Пакует предложение в куски по две строки, не разрывая группы подсветки. */
+const packSentence = (tokens: Token[]): Token[][] => {
+  const groups: Token[][] = [];
   let current: Token[] = [];
   let chars = 0;
 
-  const flush = () => {
-    if (!current.length) return;
-    chunks.push({
-      tokens: current,
-      start: current[0].start,
-      end: current[current.length - 1].end,
-    });
-    current = [];
-    chars = 0;
-  };
-
   for (const t of tokens) {
-    const next = chars + t.text.length + 1;
-    const breaksMarkGroup =
-      t.mark !== null && current.length > 0 && current[current.length - 1].mark === t.mark;
+    const width = chars + t.text.length + (current.length ? 1 : 0);
+    const continuesMark =
+      current.length > 0 && t.mark !== null && current[current.length - 1].mark === t.mark;
 
-    if (current.length && !breaksMarkGroup && (next > CHUNK.maxChars || current.length >= CHUNK.maxWords)) {
-      flush();
+    if (
+      current.length > 0 &&
+      !continuesMark &&
+      (width > CHUNK.maxChars || current.length >= CHUNK.maxWords)
+    ) {
+      groups.push(current);
+      current = [];
+      chars = 0;
     }
+
     current.push(t);
-    chars += t.text.length + 1;
+    chars += t.text.length + (current.length > 1 ? 1 : 0);
   }
-  flush();
-  return chunks;
+  if (current.length) groups.push(current);
+
+  // Хвост из одного слова читается как обрывок — подтягиваем к нему соседей.
+  for (let i = groups.length - 1; i > 0; i--) {
+    while (
+      groups[i].length < CHUNK.minWords &&
+      groups[i - 1].length > CHUNK.minWords &&
+      movable(groups[i - 1])
+    ) {
+      groups[i].unshift(groups[i - 1].pop() as Token);
+    }
+  }
+
+  return groups;
 };
+
+export const chunkTokens = (tokens: Token[]): Chunk[] =>
+  bySentence(tokens)
+    .flatMap(packSentence)
+    .filter((group) => group.length > 0)
+    .map((group) => ({
+      tokens: group,
+      start: group[0].start,
+      end: group[group.length - 1].end,
+    }));
 
 export const buildTimeline = (script: VideoScript): Timeline => {
   const fps = script.fps ?? CANVAS.fps;
