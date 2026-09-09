@@ -38,7 +38,7 @@ const Eye: React.FC<{ side: 'l' | 'r'; expr: Expression; blink: number }> = ({
       <path
         d={`M ${cx - 36} ${cy + 6} Q ${cx} ${cy - 32} ${cx + 36} ${cy + 6}`}
         stroke={INK}
-        strokeWidth={11}
+        strokeWidth={9}
         strokeLinecap="round"
         fill="none"
       />
@@ -56,7 +56,7 @@ const Eye: React.FC<{ side: 'l' | 'r'; expr: Expression; blink: number }> = ({
 
   return (
     <g>
-      <ellipse cx={cx} cy={cy} rx={rw} ry={rh} fill={EYE_WHITE} stroke={INK} strokeWidth={7} />
+      <ellipse cx={cx} cy={cy} rx={rw} ry={rh} fill={EYE_WHITE} stroke={INK} strokeWidth={5.5} />
       <circle cx={cx + gaze * dir * 0.4 + gaze} cy={cy + drop} r={pupil} fill={INK} />
       <circle cx={cx + gaze + 8} cy={cy + drop - 9} r={6} fill="#FFFFFF" />
       {expr === 'annoyed' || expr === 'sad' ? (
@@ -65,7 +65,7 @@ const Eye: React.FC<{ side: 'l' | 'r'; expr: Expression; blink: number }> = ({
           d={`M ${cx - rw - 4} ${cy - 4} A ${rw + 4} ${rh + 4} 0 0 1 ${cx + rw + 4} ${cy - 4} Z`}
           fill={SKIN_SHADE}
           stroke={INK}
-          strokeWidth={7}
+          strokeWidth={5.5}
           strokeLinejoin="round"
         />
       ) : null}
@@ -78,14 +78,15 @@ const Brows: React.FC<{ expr: Expression }> = ({ expr }) => {
   const inner = { neutral: 0, happy: -6, laugh: -8, shock: -22, think: -4, annoyed: 16, sad: -18 }[
     expr
   ];
-  const lift = { neutral: 0, happy: -4, laugh: -6, shock: -18, think: -6, annoyed: 6, sad: 0 }[expr];
-  const y = RIG.eye.cy - 62 + lift;
+  const lift = { neutral: -5, happy: -8, laugh: -10, shock: -20, think: -9, annoyed: 4, sad: -3 }[expr];
+  // Низкая бровь читается как злость, поэтому базовая высота с запасом.
+  const y = RIG.eye.cy - 76 + lift;
 
   const brow = (cx: number, dir: number) => (
     <path
       d={`M ${cx - 42 * dir} ${y + inner} Q ${cx} ${y - 14} ${cx + 42 * dir} ${y + 4}`}
       stroke={INK}
-      strokeWidth={13}
+      strokeWidth={10}
       strokeLinecap="round"
       fill="none"
     />
@@ -109,7 +110,7 @@ const Mouth: React.FC<{ expr: Expression }> = ({ expr }) => {
           d={`M 252 ${y - 12} Q 300 ${y - 4} 348 ${y - 12} Q 336 ${y + 54} 300 ${y + 54} Q 264 ${y + 54} 252 ${y - 12} Z`}
           fill="#2A1216"
           stroke={INK}
-          strokeWidth={7}
+          strokeWidth={5.5}
           strokeLinejoin="round"
         />
         <path
@@ -121,7 +122,7 @@ const Mouth: React.FC<{ expr: Expression }> = ({ expr }) => {
   }
 
   if (expr === 'shock') {
-    return <ellipse cx={300} cy={y + 16} rx={27} ry={35} fill="#2A1216" stroke={INK} strokeWidth={7} />;
+    return <ellipse cx={300} cy={y + 16} rx={27} ry={35} fill="#2A1216" stroke={INK} strokeWidth={5.5} />;
   }
 
   const d = {
@@ -134,5 +135,5 @@ const Mouth: React.FC<{ expr: Expression }> = ({ expr }) => {
     shock: '',
   }[expr];
 
-  return <path d={d} stroke={INK} strokeWidth={12} strokeLinecap="round" fill="none" />;
+  return <path d={d} stroke={INK} strokeWidth={10} strokeLinecap="round" fill="none" />;
 };

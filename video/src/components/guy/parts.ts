@@ -1,18 +1,23 @@
 /** Палитра и геометрия человечка. Всё, что задаёт его внешность, — здесь. */
-export const SKIN = '#F7CDA4';
-export const SKIN_SHADE = '#E6AE7C';
-export const HAIR = '#2C201A';
-export const SHIRT = '#1C2531';
-export const SHIRT_SHADE = '#131A23';
-export const INK = '#100E0C';
+export const SKIN = '#FBD9B4';
+export const SKIN_MID = '#F3C393';
+export const SKIN_SHADE = '#DFA574';
+export const HAIR = '#3A2A20';
+export const HAIR_DARK = '#241811';
+export const SHIRT = '#26323F';
+export const SHIRT_SHADE = '#151C25';
+/** Обводка тёплая тёмно-коричневая, а не чёрная: чистый чёрный удешевляет. */
+export const INK = '#241812';
 export const EYE_WHITE = '#FFFFFF';
+/** Контровой свет с той же стороны, откуда светит сцена. */
+export const RIM = 'rgba(214, 245, 140, 0.3)';
 
 /** Опорные точки фигуры в системе viewBox 600x800. */
 export const RIG = {
   head: { cx: 300, cy: 232, rx: 152, ry: 147 },
   eye: { lx: 242, rx: 358, cy: 232, rw: 39, rh: 43 },
   mouthY: 316,
-  armWidth: 44,
+  armWidth: 46,
 } as const;
 
 export type HandShape = 'fist' | 'palm' | 'point' | 'thumb' | 'victory';
