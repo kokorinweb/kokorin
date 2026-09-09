@@ -17,17 +17,20 @@ const Word: React.FC<{ token: Token; seconds: number; fps: number }> = ({ token,
   const marked = token.mark !== null;
   const color = marked ? COLOR.accentInk : token.bold ? COLOR.text : COLOR.textDim;
 
-  // Ударное слово выпрыгивает крупнее и оседает — на это и цепляется взгляд.
+  // Ударное слово крупнее соседей. Постоянный размер задаётся кеглем, а не
+  // трансформом: трансформ не занимает места в строке, и слово наезжало
+  // на соседнее — «делаешь одинраз.» вместо «делаешь один раз.».
   const punch = token.bold || marked;
-  const scale = punch ? interpolate(appear, [0, 1], [1.34, 1.07]) : 1;
+  const pop = punch ? interpolate(appear, [0, 1], [1.26, 1]) : 1;
 
   return (
     <span
       style={{
         color,
-        fontWeight: token.bold || marked ? 700 : 600,
+        fontWeight: punch ? 700 : 600,
+        fontSize: punch ? '1.08em' : undefined,
         opacity: 0.5 + appear * 0.5,
-        transform: `translateY(${(1 - appear) * 7}px) scale(${scale})`,
+        transform: `translateY(${(1 - appear) * 7}px) scale(${pop})`,
         display: 'inline-block',
         transition: 'none',
       }}
