@@ -20,8 +20,10 @@ const Word: React.FC<{ token: Token; seconds: number; fps: number }> = ({ token,
   // Ударное слово крупнее соседей. Постоянный размер задаётся кеглем, а не
   // трансформом: трансформ не занимает места в строке, и слово наезжало
   // на соседнее — «делаешь одинраз.» вместо «делаешь один раз.».
+  // Подскок держим маленьким: на пике слово вылезает за свою ширину и
+  // задевает соседнее — в кадре читалось «отличносужает».
   const punch = token.bold || marked;
-  const pop = punch ? interpolate(appear, [0, 1], [1.26, 1]) : 1;
+  const pop = punch ? interpolate(appear, [0, 1], [1.12, 1]) : 1;
 
   return (
     <span
@@ -29,6 +31,7 @@ const Word: React.FC<{ token: Token; seconds: number; fps: number }> = ({ token,
         color,
         fontWeight: punch ? 700 : 600,
         fontSize: punch ? '1.08em' : undefined,
+        marginInline: punch ? '0.05em' : undefined,
         opacity: 0.5 + appear * 0.5,
         transform: `translateY(${(1 - appear) * 7}px) scale(${pop})`,
         display: 'inline-block',
@@ -93,28 +96,30 @@ export const Subtitles: React.FC<Props> = ({ chunks }) => {
         }}
       >
         {runs(active.tokens).map((run, i) => (
-          <span
-            key={i}
-            style={
-              run.mark === null
-                ? { display: 'inline' }
-                : {
-                    display: 'inline-block',
-                    background: COLOR.accent,
-                    borderRadius: 10,
-                    padding: '2px 12px 5px',
-                    margin: '0 2px',
-                  }
-            }
-          >
-            {run.tokens.map((t, j) => (
-              <React.Fragment key={j}>
-                {j > 0 ? ' ' : null}
-                <Word token={t} seconds={seconds} fps={fps} />
-              </React.Fragment>
-            ))}
+          <React.Fragment key={i}>
+            <span
+              style={
+                run.mark === null
+                  ? { display: 'inline' }
+                  : {
+                      display: 'inline-block',
+                      background: COLOR.accent,
+                      borderRadius: 10,
+                      padding: '2px 12px 5px',
+                    }
+              }
+            >
+              {run.tokens.map((t, j) => (
+                <React.Fragment key={j}>
+                  {j > 0 ? ' ' : null}
+                  <Word token={t} seconds={seconds} fps={fps} />
+                </React.Fragment>
+              ))}
+            </span>
+            {/* Пробел стоит снаружи плашки: внутри inline-block он схлопывается,
+                и после подсветки слова слипались — «тремявещами». */}
             {' '}
-          </span>
+          </React.Fragment>
         ))}
       </div>
     </div>
