@@ -85,9 +85,20 @@ node tools/voice.mjs scripts/skills.json
 npx remotion render Reel out/skills.mp4 --props=scripts/skills.json
 ```
 
-Свой голос вместо синтеза: `TTS_PROVIDER=files`, а записи сцен положить в
-`public/voice/<id>/00.mp3`, `01.mp3` и так далее. Скрипт их не тронет,
-только измерит и склеит.
+Свой голос вместо синтеза — основной путь:
+
+```bash
+node tools/text.mjs scripts/skills.json      # текст по сценам, под начитку
+# записываешь каждую сцену отдельным файлом:
+# public/voice/skills/00.mp3, 01.mp3, 02.mp3 ...
+TTS_PROVIDER=files node tools/voice.mjs scripts/skills.json
+npx remotion render Reel out/skills.mp4 --props=scripts/skills.json
+```
+
+Скрипт записи не трогает — только измеряет длину каждой и склеивает
+дорожку, а сцены в ролике растягиваются под неё. Поэтому читать можно
+в своём темпе и с любыми паузами: подгонять голос под картинку не надо,
+картинка подгонится сама.
 
 Нужны `ffmpeg` и `ffprobe` в PATH.
 
