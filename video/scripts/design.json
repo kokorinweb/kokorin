@@ -10,27 +10,57 @@
       {
         "text": "Сайты, собранные с нейросетью, узнаются с первого экрана.",
         "pose": "cross",
-        "broll": { "type": "shot", "src": "shots/placeholder.png", "caption": "видел это сто раз" }
+        "broll": {
+          "type": "shot",
+          "src": "shots/placeholder.png",
+          "caption": "видел это сто раз"
+        }
       },
       {
         "text": "Тот же градиент. Те же карточки. Тот же шрифт.",
         "pose": "shrug",
-        "broll": { "type": "chips", "items": [{ "label": "градиент" }, { "label": "карточки" }, { "label": "Inter" }] }
+        "broll": {
+          "type": "chips",
+          "items": [
+            {
+              "label": "градиент"
+            },
+            {
+              "label": "карточки"
+            },
+            {
+              "label": "Inter"
+            }
+          ]
+        }
       },
       {
         "text": "Причина одна: ты не дал ей **ограничений**.",
         "pose": "point",
-        "broll": { "type": "badge", "icon": "warning", "label": "рамок нет", "tone": "warn" }
+        "broll": {
+          "type": "badge",
+          "icon": "warning",
+          "label": "рамок нет",
+          "tone": "warn"
+        }
       },
       {
         "text": "Модель без рамок выдаёт среднее по интернету. Оно и выглядит средним.",
         "pose": "explain",
-        "broll": { "type": "none" }
+        "broll": {
+          "type": "none"
+        },
+        "sfx": "none"
       },
       {
         "text": "Чинится ==тремя== вещами.",
         "pose": "point",
-        "broll": { "type": "bignum", "value": "3", "label": "что задать" }
+        "broll": {
+          "type": "bignum",
+          "value": "3",
+          "label": "что задать"
+        },
+        "sfx": "thud"
       },
       {
         "text": "Первое — токены. Свои цвета, свой шаг сетки, свои радиусы.",
@@ -38,34 +68,64 @@
         "broll": {
           "type": "code",
           "file": "tokens.css",
-          "lines": ["--step: 8px", "--radius: 14px", "--accent: #C6F24E"]
+          "lines": [
+            "--step: 8px",
+            "--radius: 14px",
+            "--accent: #C6F24E"
+          ]
         }
       },
       {
         "text": "Второе — референс. Не «сделай красиво», а «сделай вот так».",
         "pose": "think",
-        "broll": { "type": "strike", "text": "сделай красиво", "note": "сделай как здесь" }
+        "broll": {
+          "type": "strike",
+          "text": "сделай красиво",
+          "note": "сделай как здесь"
+        }
       },
       {
         "text": "Третье — **запреты**. Прямым списком, без вежливости.",
         "pose": "stop",
-        "broll": { "type": "list", "items": ["Без градиентов", "Без эмодзи", "Без теней на карточках"] }
+        "broll": {
+          "type": "list",
+          "items": [
+            "Без градиентов",
+            "Без эмодзи",
+            "Без теней на карточках"
+          ]
+        }
       },
       {
         "text": "Запрет работает сильнее пожелания. Всегда.",
         "pose": "point",
-        "broll": { "type": "badge", "icon": "shield", "label": "запрет" }
+        "broll": {
+          "type": "badge",
+          "icon": "shield",
+          "label": "запрет"
+        }
       },
       {
         "text": "Модель отлично **сужает** и плохо **выбирает**.",
         "pose": "think",
-        "broll": { "type": "none" }
+        "broll": {
+          "type": "none"
+        },
+        "sfx": "none"
       },
       {
         "text": "Дай ей рамку — получишь свой дизайн, а не средний.",
         "pose": "happy",
-        "broll": { "type": "badge", "icon": "check", "label": "свой" }
+        "broll": {
+          "type": "badge",
+          "icon": "check",
+          "label": "свой"
+        }
       }
-    ]
+    ],
+    "sfx": {
+      "enter": "pop",
+      "volume": 0.35
+    }
   }
 }

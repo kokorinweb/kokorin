@@ -10,12 +10,22 @@
       {
         "text": "Твой интерфейс выглядит ==дёшево==. И дело вообще не в цвете.",
         "pose": "shrug",
-        "broll": { "type": "badge", "icon": "warning", "label": "выглядит дёшево", "tone": "warn" }
+        "broll": {
+          "type": "badge",
+          "icon": "warning",
+          "label": "выглядит дёшево",
+          "tone": "warn"
+        }
       },
       {
         "text": "Первое, что тебя выдаёт — это **отступы**.",
         "pose": "point",
-        "broll": { "type": "bignum", "value": "8", "label": "базовый шаг" }
+        "broll": {
+          "type": "bignum",
+          "value": "8",
+          "label": "базовый шаг"
+        },
+        "sfx": "thud"
       },
       {
         "text": "Все расстояния идут одним шагом. Не на глаз, а по шкале.",
@@ -23,12 +33,25 @@
         "broll": {
           "type": "chips",
           "items": [
-            { "label": "4" },
-            { "label": "8", "tone": "accent" },
-            { "label": "16" },
-            { "label": "24" },
-            { "label": "32" },
-            { "label": "48" }
+            {
+              "label": "4"
+            },
+            {
+              "label": "8",
+              "tone": "accent"
+            },
+            {
+              "label": "16"
+            },
+            {
+              "label": "24"
+            },
+            {
+              "label": "32"
+            },
+            {
+              "label": "48"
+            }
           ]
         }
       },
@@ -48,33 +71,66 @@
       {
         "text": "Не выдумывай их. Забери готовые ==токены== одной командой.",
         "pose": "point",
-        "broll": { "type": "terminal", "title": "установка", "command": "npx shadcn@latest add button" }
+        "broll": {
+          "type": "terminal",
+          "title": "установка",
+          "command": "npx shadcn@latest add button"
+        }
       },
       {
         "text": "Третье — **анимация**. Вот здесь ломаются почти все.",
         "pose": "stop",
-        "broll": { "type": "list", "items": ["Длительность", "Кривая", "Частота"] }
+        "broll": {
+          "type": "list",
+          "items": [
+            "Длительность",
+            "Кривая",
+            "Частота"
+          ]
+        }
       },
       {
         "text": "==ease-in-out== на каждый клик — это и есть дешевизна.",
         "pose": "facepalm",
-        "broll": { "type": "strike", "text": "ease-in-out", "note": "не на каждый клик", "noteTone": "warn" }
+        "broll": {
+          "type": "strike",
+          "text": "ease-in-out",
+          "note": "не на каждый клик",
+          "noteTone": "warn"
+        }
       },
       {
         "text": "Всё, что длится дольше ==300 мс==, ощущается как тормоза.",
         "pose": "explain",
-        "broll": { "type": "bignum", "value": "300 мс", "label": "предел для анимации" }
+        "broll": {
+          "type": "bignum",
+          "value": "300 мс",
+          "label": "предел для анимации"
+        },
+        "sfx": "thud"
       },
       {
         "text": "Вот так это выглядит, когда собрано **правильно**.",
         "pose": "happy",
-        "broll": { "type": "shot", "src": "shots/placeholder.png", "caption": "пример" }
+        "broll": {
+          "type": "shot",
+          "src": "shots/placeholder.png",
+          "caption": "пример"
+        }
       },
       {
         "text": "Сохрани, если сегодня чинишь свой интерфейс.",
         "pose": "happy",
-        "broll": { "type": "badge", "icon": "check", "label": "сохранить" }
+        "broll": {
+          "type": "badge",
+          "icon": "check",
+          "label": "сохранить"
+        }
       }
-    ]
+    ],
+    "sfx": {
+      "enter": "pop",
+      "volume": 0.35
+    }
   }
 }
