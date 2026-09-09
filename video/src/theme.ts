@@ -43,6 +43,23 @@ export const LAYOUT = {
   mascotHeight: 760,
 } as const;
 
+/**
+ * Крупность плана. Кадр не должен стоять на месте: на реакциях персонажа
+ * подводим ближе, на информационных кадрах отводим назад.
+ */
+export const SHOTS = {
+  wide: { scale: 0.88, y: 30 },
+  mid: { scale: 1, y: 0 },
+  close: { scale: 1.42, y: 330 },
+} as const;
+
+/** Высота блока B-roll в кадре — доля высоты. */
+export const PLACES = {
+  high: 0.17,
+  top: 0.24,
+  center: 0.33,
+} as const;
+
 /** Ритм: сколько кадров занимают типовые появления. */
 export const BEAT = {
   wordIn: 5,

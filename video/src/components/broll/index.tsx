@@ -1,15 +1,42 @@
 import React from 'react';
 import { Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
-import { BEAT, COLOR, FONT, LAYOUT } from '../../theme';
-import type { Broll } from '../../script/types';
+import { COLOR, FONT, LAYOUT, PLACES } from '../../theme';
+import type { Broll, Place } from '../../script/types';
 import { Icon } from '../Icon';
 import { Chip, Panel, Stack, toneColors } from './parts';
 
-/** Обёртка: любой визуал влетает одинаково, чтобы ролик держал ритм. */
-const Enter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+/**
+ * Блок влетает с разных сторон и с разной высоты — если каждый раз одинаково
+ * снизу по центру, кадр читается как слайд-шоу. Сторона берётся из номера
+ * сцены, поэтому соседние блоки никогда не приходят одинаково.
+ */
+const Enter: React.FC<{
+  children: React.ReactNode;
+  index: number;
+  place: Place;
+  durationInFrames: number;
+}> = ({ children, index, place, durationInFrames }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame, fps, config: { damping: 16, stiffness: 150, mass: 0.7 } });
+
+  // Четыре стороны по кругу: снизу, слева, справа, сверху.
+  const side = index % 4;
+  const from = [
+    { x: 0, y: 44 },
+    { x: -90, y: 12 },
+    { x: 90, y: 12 },
+    { x: 0, y: -48 },
+  ][side];
+
+  // Уход в конце сцены даёт монтажный стык вместо подмены картинки.
+  const leave = interpolate(frame, [durationInFrames - 7, durationInFrames], [1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+
+  // Пока блок на экране, он еле заметно наезжает — кадр не застывает.
+  const creep = 1 + Math.min(frame, 200) * 0.00035;
 
   return (
     <div
@@ -17,8 +44,8 @@ const Enter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         position: 'absolute',
         left: 0,
         right: 0,
-        top: `${LAYOUT.brollCenterY * 100}%`,
-        transform: `translateY(-50%)`,
+        top: `${PLACES[place] * 100}%`,
+        transform: 'translateY(-50%)',
         display: 'flex',
         justifyContent: 'center',
       }}
@@ -29,12 +56,12 @@ const Enter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          opacity: interpolate(s, [0, 0.5], [0, 1], { extrapolateRight: 'clamp' }),
-          transform: `translateY(${interpolate(s, [0, 1], [30, 0])}px) scale(${interpolate(
+          opacity: interpolate(s, [0, 0.5], [0, 1], { extrapolateRight: 'clamp' }) * leave,
+          transform: `translate(${interpolate(s, [0, 1], [from.x, 0])}px, ${interpolate(
             s,
             [0, 1],
-            [0.93, 1],
-          )})`,
+            [from.y, 0],
+          )}px) scale(${interpolate(s, [0, 1], [0.9, 1]) * creep})`,
         }}
       >
         {children}
@@ -274,7 +301,12 @@ const ChipRow: React.FC<{ label: string; index: number; tone?: Extract<Broll, { 
   );
 };
 
-export const BrollView: React.FC<{ broll?: Broll }> = ({ broll }) => {
+export const BrollView: React.FC<{
+  broll?: Broll;
+  index: number;
+  place?: Place;
+  durationInFrames: number;
+}> = ({ broll, index, place = 'top', durationInFrames }) => {
   if (!broll || broll.type === 'none') return null;
 
   const inner = (() => {
@@ -298,5 +330,9 @@ export const BrollView: React.FC<{ broll?: Broll }> = ({ broll }) => {
     }
   })();
 
-  return <Enter>{inner}</Enter>;
+  return (
+    <Enter index={index} place={place} durationInFrames={durationInFrames}>
+      {inner}
+    </Enter>
+  );
 };

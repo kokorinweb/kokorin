@@ -35,6 +35,12 @@ export type Music = {
   loopSeconds?: number;
 };
 
+/** Крупность плана на сцене. */
+export type Shot = 'wide' | 'mid' | 'close';
+
+/** Высота, на которой стоит блок B-roll. */
+export type Place = 'high' | 'top' | 'center';
+
 export type Scene = {
   /** Текст реплики. Разметка: **жирным** и ==в плашке==. */
   text: string;
@@ -47,6 +53,10 @@ export type Scene = {
   words?: AlignedWord[];
   /** Свой звук на входе сцены вместо общего. `none` — тишина. */
   sfx?: string;
+  /** Крупность плана. По умолчанию `mid`. */
+  shot?: Shot;
+  /** Куда встаёт блок B-roll. По умолчанию `top`. */
+  place?: Place;
 };
 
 export type VideoScript = {

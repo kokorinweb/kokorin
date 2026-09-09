@@ -17,13 +17,17 @@ const Word: React.FC<{ token: Token; seconds: number; fps: number }> = ({ token,
   const marked = token.mark !== null;
   const color = marked ? COLOR.accentInk : token.bold ? COLOR.text : COLOR.textDim;
 
+  // Ударное слово выпрыгивает крупнее и оседает — на это и цепляется взгляд.
+  const punch = token.bold || marked;
+  const scale = punch ? interpolate(appear, [0, 1], [1.34, 1.07]) : 1;
+
   return (
     <span
       style={{
         color,
         fontWeight: token.bold || marked ? 700 : 600,
         opacity: 0.5 + appear * 0.5,
-        transform: `translateY(${(1 - appear) * 7}px)`,
+        transform: `translateY(${(1 - appear) * 7}px) scale(${scale})`,
         display: 'inline-block',
         transition: 'none',
       }}

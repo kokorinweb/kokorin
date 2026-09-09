@@ -6,7 +6,7 @@ import { BrollView } from './components/broll';
 import { Mascot } from './components/Mascot';
 import { Subtitles } from './components/Subtitles';
 import { buildTimeline, sceneAt } from './script/parse';
-import type { Music, VideoScript } from './script/types';
+import type { Music, Shot, VideoScript } from './script/types';
 
 export type ReelProps = {
   script: VideoScript;
@@ -28,13 +28,24 @@ export const Reel: React.FC<ReelProps> = ({ script, mascot = true, shirt }) => {
       <BackingTrack music={script.music} hasVoice={Boolean(timeline.audio)} />
 
       {mascot ? (
-        <Mascot pose={active?.pose} poseChangedAt={active?.from ?? 0} shirt={shirt} />
+        <Mascot
+          pose={active?.pose}
+          poseChangedAt={active?.from ?? 0}
+          shot={active?.shot ?? 'mid'}
+          prevShot={timeline.scenes[(active?.index ?? 0) - 1]?.shot ?? 'mid'}
+          shirt={shirt}
+        />
       ) : null}
 
       {timeline.scenes.map((scene) => (
         <Sequence key={scene.index} from={scene.from} durationInFrames={scene.durationInFrames}>
           <EnterSound name={scene.sfx ?? script.sfx?.enter} volume={script.sfx?.volume} />
-          <BrollView broll={scene.broll} />
+          <BrollView
+            broll={scene.broll}
+            index={scene.index}
+            place={scene.place}
+            durationInFrames={scene.durationInFrames}
+          />
           <Subtitles chunks={scene.chunks} />
         </Sequence>
       ))}
