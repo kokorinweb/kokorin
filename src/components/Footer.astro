@@ -1,5 +1,9 @@
 ---
-import { footer, site } from '../data/content';
+import { footer, nav, site } from '../data/content';
+import { sectionLink } from '../lib/url';
+
+const here = Astro.url.pathname;
+const link = (anchor: string) => sectionLink(anchor, here);
 const year = new Date().getFullYear();
 import { withBase } from '../lib/url';
 ---
@@ -20,6 +24,16 @@ import { withBase } from '../lib/url';
         <p class="font-display text-base text-mist-50">{site.legalName}</p>
         <p class="mt-2 text-sm leading-relaxed text-mist-500">{site.tagline}</p>
       </div>
+
+      <nav aria-label="Разделы" class="flex flex-col gap-2">
+        {
+          nav.map((item) => (
+            <a href={link(item.href)} class="text-sm text-mist-300 transition-colors hover:text-mist-50">
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
 
       <nav aria-label="Документы" class="flex flex-col gap-2">
         {

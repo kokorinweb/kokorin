@@ -1,0 +1,137 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Icon from '../../components/Icon.astro';
+import { dianaCase, site } from '../../data/content';
+import { withBase } from '../../lib/url';
+
+const c = dianaCase;
+---
+
+<Base title={`${c.name} — ${site.name}`} description={c.lead}>
+  <Header />
+
+  <main id="main">
+    <!-- Обложка -->
+    <section class="relative isolate overflow-clip pt-40 pb-16 sm:pt-48">
+      <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        <div class="aura -top-32 left-1/2 size-[42rem] -translate-x-1/2 bg-gold-600/16"></div>
+        <div class="aura top-32 -left-40 size-[30rem] bg-violet-600/14"></div>
+      </div>
+
+      <div class="container-page">
+        <a
+          href={withBase('/#cases')}
+          class="inline-flex items-center gap-2 text-sm text-mist-500 transition-colors hover:text-gold-400"
+        >
+          <Icon name="arrow" class="size-4 rotate-180" />
+          Все кейсы
+        </a>
+
+        <span class="mt-8 block text-xs tracking-[0.18em] text-gold-400 uppercase">{c.category}</span>
+
+        <h1 class="mt-4 max-w-4xl text-[clamp(2rem,6vw,4rem)] leading-[1.05] text-mist-50">
+          {c.name}
+        </h1>
+
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-mist-300">{c.lead}</p>
+
+        <dl class="mt-12 grid gap-px overflow-hidden rounded-card border border-white/8 bg-white/8 sm:grid-cols-3">
+          {
+            c.stats.map((s) => (
+              <div class="flex flex-col gap-1 bg-ink-950/85 px-6 py-6">
+                <dd class="font-display text-3xl text-gold-500">{s.value}</dd>
+                <dt class="text-sm text-mist-500">{s.label}</dt>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- Задача и результат -->
+    <section class="relative overflow-clip py-16 sm:py-20">
+      <div class="container-page grid gap-4 lg:grid-cols-2">
+        <article class="card-glass card-hover p-8 sm:p-10">
+          <span class="text-xs tracking-[0.18em] text-mist-500 uppercase">{c.task.title}</span>
+          <p class="mt-5 text-base leading-relaxed text-mist-100 sm:text-lg">{c.task.text}</p>
+        </article>
+
+        <article class="card-glass card-hover p-8 sm:p-10">
+          <span class="text-xs tracking-[0.18em] text-gold-400 uppercase">{c.result.title}</span>
+          <p class="mt-5 text-base leading-relaxed text-mist-100 sm:text-lg">{c.result.text}</p>
+          <p class="mt-4 text-sm leading-relaxed text-mist-500">{c.result.note}</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Что сделал -->
+    <section class="relative overflow-clip py-16 sm:py-20">
+      <div class="aura top-1/3 -right-40 size-[30rem] bg-gold-600/10" aria-hidden="true"></div>
+
+      <div class="container-page relative">
+        <h2 class="text-3xl text-mist-50 sm:text-4xl">{c.work.title}</h2>
+
+        <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            c.work.items.map((item, i) => (
+              <li class="card-glass card-hover flex gap-4 p-6">
+                <span class="font-display text-sm text-gold-500">{String(i + 1).padStart(2, '0')}</span>
+                <p class="text-sm leading-relaxed text-mist-200">{item}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Отзыв -->
+    <section class="relative overflow-clip py-16 sm:py-20">
+      <div class="container-page">
+        <figure class="card-glass mx-auto max-w-3xl p-8 text-center sm:p-12">
+          <span class="font-display text-5xl leading-none text-gold-500/35" aria-hidden="true">&laquo;</span>
+          <blockquote class="mt-4 text-xl leading-relaxed text-mist-50 sm:text-2xl">
+            {c.quote.text}
+          </blockquote>
+          <figcaption class="mt-8 flex items-center justify-center gap-3">
+            <span class="grid size-10 place-items-center rounded-full border border-gold-500/25 bg-gold-500/8 font-display text-sm text-gold-400">
+              {c.quote.author.charAt(0)}
+            </span>
+            <span class="text-left">
+              <span class="block text-sm font-medium text-mist-50">{c.quote.author}</span>
+              <span class="block text-xs text-mist-500">{c.quote.role}</span>
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Призыв -->
+    <section class="relative overflow-clip py-16 sm:py-24">
+      <div class="aura bottom-0 left-1/2 size-[38rem] -translate-x-1/2 bg-gold-600/14" aria-hidden="true"></div>
+
+      <div class="container-page relative flex flex-col items-center gap-7 text-center">
+        <h2 class="max-w-xl text-3xl text-mist-50 sm:text-4xl">Нужен такой же бот под ваши услуги?</h2>
+        <p class="max-w-lg text-base leading-relaxed text-mist-300">
+          Соберу анкету под ваше направление, настрою уведомления и запущу бота на сервере. Обычно это
+          занимает несколько дней.
+        </p>
+        <a
+          href={withBase('/#brief')}
+          class="group glow-gold inline-flex items-center gap-2 rounded-pill bg-gold-500 px-8 py-4 font-semibold tracking-wide text-ink-950 uppercase transition-all duration-300 hover:scale-[1.03] hover:bg-gold-400"
+        >
+          Обсудить проект
+          <Icon name="arrow" class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<script>
+  import { initCardSpotlight } from '../../scripts/card-spotlight';
+  initCardSpotlight();
+</script>

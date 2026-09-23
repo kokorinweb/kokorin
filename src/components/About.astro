@@ -1,6 +1,7 @@
 ---
 import { about } from '../data/content';
 import Icon from './Icon.astro';
+import { withBase } from '../lib/url';
 ---
 
 <section id="about" class="relative overflow-clip py-24 sm:py-32">
@@ -8,19 +9,28 @@ import Icon from './Icon.astro';
 
   <div class="container-page relative">
     <div class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
-      <!-- Портретная заглушка: замени на реальное фото -->
       <div class="reveal relative mx-auto w-full max-w-sm lg:mx-0">
         <div
           class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-gold-500/20 via-transparent to-violet-600/20 blur-2xl"
           aria-hidden="true"
         >
         </div>
-        <div class="relative aspect-4/5 overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-ink-800 to-ink-950">
+        <div class="relative aspect-4/5 overflow-hidden rounded-[1.75rem] border border-white/10">
+          <img
+            src={withBase('/img/ilya.webp')}
+            alt="Илья Кокорин у панорамного окна с видом на Москва-Сити"
+            width="1086"
+            height="1448"
+            loading="lazy"
+            decoding="async"
+            class="size-full object-cover"
+          />
+          <!-- Мягкое затемнение снизу, чтобы фото срасталось с фоном секции -->
           <div
-            class="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_30%_20%,rgba(240,180,41,0.35),transparent_55%),radial-gradient(circle_at_75%_80%,rgba(124,92,255,0.3),transparent_55%)]"
+            class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink-950/80 to-transparent"
+            aria-hidden="true"
           >
           </div>
-          <span class="absolute inset-x-0 bottom-0 p-6 font-display text-sm text-mist-500">Фото / портрет</span>
         </div>
       </div>
 

@@ -22,9 +22,13 @@ npm run check    # проверка типов
 | 03 | Кейсы — 6 проектов | `Cases.astro` |
 | 04 | Как мы будем работать | `Process.astro` |
 | 05 | Обо мне | `About.astro` |
-| 06 | FAQ | `Faq.astro` |
-| 07 | Бриф-квиз | `Brief.astro` |
-| 08 | Контакты | `Contacts.astro` |
+| 06 | Цены | `Pricing.astro` |
+| 07 | FAQ | `Faq.astro` |
+| 08 | Бриф-квиз | `Brief.astro` |
+| 09 | Контакты | `Contacts.astro` |
+
+Страница кейса: `src/pages/cases/diana-bot.astro`, данные — `dianaCase`
+в `content.ts`.
 
 Плюс страницы `/privacy` и `/terms` на общем макете `layouts/Legal.astro`.
 
@@ -41,9 +45,8 @@ npm run check    # проверка типов
 
 - [ ] `src/components/Brief.astro` — endpoint формы вместо заглушки `/api/lead`.
       Сейчас квиз шлёт POST с полями `who`, `what[]`, `task`, `contact`
-- [ ] Страницы кейсов: ссылки ведут на `/portfolio/*.html`, этих файлов
+- [ ] Страницы кейсов: пять ссылок ведут на `/portfolio/*.html`, этих файлов
       в репозитории нет — перенести их или поправить `href` в `content.ts`
-- [ ] `src/components/About.astro` — реальное фото вместо плейсхолдера
 - [ ] Проверить ответы в FAQ: первый взят с сайта дословно, остальные пять
       написаны по смыслу вопросов и требуют вычитки
 - [ ] Домен: сейчас `agency-kokorin.ru` (из адреса почты) — заменить,

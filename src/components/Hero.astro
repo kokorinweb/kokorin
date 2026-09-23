@@ -48,11 +48,8 @@ import Icon from './Icon.astro';
         {hero.primaryCta.label}
         <Icon name="arrow" class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
       </a>
-      <a
-        href={hero.secondaryCta.href}
-        class="inline-flex items-center justify-center gap-2 rounded-pill border border-white/12 px-7 py-4 font-medium tracking-wide text-mist-100 uppercase transition-colors duration-300 hover:border-white/25 hover:bg-white/5"
-      >
-        {hero.secondaryCta.label}
+      <a href={hero.secondaryCta.href} class="btn-wipe inline-flex items-center justify-center">
+        <span class="btn-wipe-text"><span>{hero.secondaryCta.label}</span></span>
       </a>
     </div>
 

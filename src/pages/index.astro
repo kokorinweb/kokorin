@@ -6,6 +6,7 @@ import Services from '../components/Services.astro';
 import Cases from '../components/Cases.astro';
 import Process from '../components/Process.astro';
 import About from '../components/About.astro';
+import Pricing from '../components/Pricing.astro';
 import Faq from '../components/Faq.astro';
 import Brief from '../components/Brief.astro';
 import Contacts from '../components/Contacts.astro';
@@ -20,6 +21,7 @@ import Footer from '../components/Footer.astro';
     <Cases />
     <Process />
     <About />
+    <Pricing />
     <Faq />
     <Brief />
     <Contacts />
@@ -28,6 +30,10 @@ import Footer from '../components/Footer.astro';
 </Base>
 
 <script>
+  import { initCardSpotlight } from '../scripts/card-spotlight';
+
+  initCardSpotlight();
+
   // Появление блоков при скролле. Один наблюдатель на всю страницу.
   const items = document.querySelectorAll('.reveal');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
