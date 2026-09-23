@@ -170,7 +170,7 @@
 
   &:hover::before {
     opacity: 1;
-    animation: spark-run 1.4s linear infinite;
+    animation: spark-run 3.6s linear infinite;
   }
 }
 
