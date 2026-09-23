@@ -1,6 +1,7 @@
 ---
 import Legal from '../layouts/Legal.astro';
 import { site } from '../data/content';
+import { withBase } from '../lib/url';
 ---
 
 <Legal
@@ -15,7 +16,7 @@ import { site } from '../data/content';
   <p class="text-mist-300">
     Отправляя заявку, вы подтверждаете, что указанные вами данные достоверны, и соглашаетесь на
     обработку персональных данных в объёме, описанном в
-    <a href="/privacy" class="text-gold-400 underline underline-offset-2">политике конфиденциальности</a>.
+    <a href={withBase('/privacy')} class="text-gold-400 underline underline-offset-2">политике конфиденциальности</a>.
   </p>
   <p class="text-mist-300">
     Условия сотрудничества — сроки, состав работ и стоимость — согласуются отдельно по каждому

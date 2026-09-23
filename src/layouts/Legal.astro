@@ -9,6 +9,7 @@ interface Props {
   description: string;
 }
 const { title, heading, description } = Astro.props;
+import { withBase } from '../lib/url';
 ---
 
 <Base title={title} description={description}>
@@ -17,7 +18,7 @@ const { title, heading, description } = Astro.props;
     <div class="mx-auto flex max-w-2xl flex-col gap-5">
       <h1 class="text-4xl text-mist-50 sm:text-5xl">{heading}</h1>
       <slot />
-      <a href="/" class="mt-4 text-sm text-mist-500 transition-colors hover:text-mist-100">&larr; На главную</a>
+      <a href={withBase('/')} class="mt-4 text-sm text-mist-500 transition-colors hover:text-mist-100">&larr; На главную</a>
     </div>
   </main>
   <Footer />

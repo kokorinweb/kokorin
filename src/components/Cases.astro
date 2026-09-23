@@ -2,6 +2,7 @@
 import { cases } from '../data/content';
 import SectionHead from './SectionHead.astro';
 import Icon from './Icon.astro';
+import { withBase } from '../lib/url';
 ---
 
 <section id="cases" class="relative overflow-clip py-24 sm:py-32">
@@ -13,7 +14,7 @@ import Icon from './Icon.astro';
       {
         cases.items.map((item, i) => (
           <a
-            href={item.href}
+            href={withBase(item.href)}
             class="reveal card-glass card-hover group flex flex-col p-7"
             style={`--reveal-delay:${(i % 3) * 90}ms`}
           >

@@ -52,6 +52,32 @@ npm run check    # проверка типов
 
 ## Деплой
 
-`npm run build` отдаёт статику в `dist/` — подходит любой статик-хостинг
-(Vercel, Netlify, Cloudflare Pages, nginx). Серверная часть нужна только
-для приёма заявок из брифа.
+Сайт автоматически публикуется на GitHub Pages при каждом пуше в
+`claude/ku-xirdur`: **https://kokorinweb.github.io/kokorin/**
+
+Workflow — `.github/workflows/deploy.yml`: ставит зависимости, гоняет
+`astro check`, собирает и выкладывает `dist/`. Запустить вручную можно
+во вкладке Actions → Deploy to GitHub Pages → Run workflow.
+
+### Base-путь
+
+На Pages сайт живёт в подпапке `/kokorin/`, поэтому все внутренние
+ссылки идут через `withBase()` из `src/lib/url.ts`. Добавляешь новую
+ссылку на страницу или файл из `public/` — оборачивай её в `withBase()`,
+иначе на Pages она уйдёт в 404. Якоря (`#brief`) и внешние ссылки
+оборачивать не нужно.
+
+Адрес и base задаются переменными окружения при сборке:
+
+| Переменная | На Pages | Локально / свой домен |
+|---|---|---|
+| `SITE_URL` | `https://kokorinweb.github.io` | `https://agency-kokorin.ru` |
+| `BASE_PATH` | `/kokorin` | `/` |
+
+Workflow берёт их из `actions/configure-pages`, так что после привязки
+своего домена в настройках Pages base станет пустым сам.
+
+### Свой домен
+
+Settings → Pages → Custom domain, затем CNAME-запись у регистратора
+на `kokorinweb.github.io`. Код менять не нужно.

@@ -7,6 +7,7 @@ const direct = [
   { icon: 'instagram', label: 'Instagram', handle: site.instagram.handle, href: site.instagram.href },
   { icon: 'mail', label: 'Email', handle: site.email.handle, href: site.email.href },
 ];
+import { withBase } from '../lib/url';
 ---
 
 <section id="brief" class="relative overflow-clip py-24 sm:py-32">
@@ -137,7 +138,7 @@ const direct = [
           <span>
             {brief.consent}{' '}
             <a
-              href={brief.consentLink.href}
+              href={withBase(brief.consentLink.href)}
               class="text-mist-300 underline decoration-mist-500/40 underline-offset-2 hover:text-gold-400"
               >{brief.consentLink.label}</a
             >.
