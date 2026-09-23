@@ -14,12 +14,13 @@ import Icon from './Icon.astro';
       subtitle={services.subtitle}
     />
 
-    <div class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="services-grid mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
         services.items.map((item, i) => (
           <article
-            class="reveal card-glass card-hover group flex flex-col p-7"
+            class="reveal card-glass card-hover service-card group relative flex flex-col p-7"
             style={`--reveal-delay:${(i % 3) * 90}ms`}
+            data-open="false"
           >
             <div class="flex items-center justify-between">
               <span class="grid size-12 place-items-center rounded-2xl border border-gold-500/20 bg-gold-500/8 text-gold-400 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-0.5 group-hover:scale-105">
@@ -49,27 +50,49 @@ import Icon from './Icon.astro';
               </div>
             )}
 
-            <details class="service-details mt-6 border-t border-white/6 pt-5">
-              <summary class="flex cursor-pointer items-center gap-2 text-sm text-mist-500 transition-colors duration-300 hover:text-gold-400">
-                <span class="summary-label">Подробнее</span>
-                <Icon
-                  name="plus"
-                  class="size-4 transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-open:rotate-45"
-                />
-              </summary>
+            <button
+              type="button"
+              class="service-toggle mt-6 flex cursor-pointer items-center gap-2 border-t border-white/6 pt-5 text-sm text-mist-500 transition-colors duration-300 hover:text-gold-400"
+              aria-expanded="false"
+              aria-controls={`service-panel-${i}`}
+            >
+              Подробнее
+              <Icon
+                name="plus"
+                class="service-toggle-icon size-4 transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              />
+            </button>
 
-              <div class="pt-4">
-                <p class="text-sm leading-relaxed text-mist-300">{item.details.text}</p>
-                <dl class="mt-4 flex flex-col gap-2">
-                  {item.details.rows.map((row) => (
-                    <div class="flex items-baseline justify-between gap-4 border-b border-dashed border-white/8 pb-2 last:border-0">
-                      <dt class="text-sm text-mist-300">{row.label}</dt>
-                      <dd class="font-display text-sm whitespace-nowrap text-mist-50">{row.price}</dd>
-                    </div>
-                  ))}
-                </dl>
+            {/* Панель выезжает поверх карточки, поэтому соседние карточки не растягиваются */}
+            <div
+              class="service-panel absolute inset-0 flex flex-col rounded-card p-7"
+              id={`service-panel-${i}`}
+            >
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h4 class="text-lg text-mist-50">{item.title}</h4>
+                  <p class="mt-1 font-display text-base text-gold-500">{item.price}</p>
+                </div>
+                <button
+                  type="button"
+                  class="service-close grid size-9 shrink-0 cursor-pointer place-items-center rounded-full border border-white/10 text-mist-300 transition-colors hover:border-gold-500/40 hover:text-gold-400"
+                  aria-label="Свернуть подробности"
+                >
+                  <Icon name="plus" class="size-4 rotate-45" />
+                </button>
               </div>
-            </details>
+
+              <p class="mt-5 text-sm leading-relaxed text-mist-200">{item.details.text}</p>
+
+              <dl class="mt-auto flex flex-col gap-2 pt-5">
+                {item.details.rows.map((row) => (
+                  <div class="flex items-baseline justify-between gap-4 border-b border-dashed border-white/10 pb-2 last:border-0">
+                    <dt class="text-sm text-mist-300">{row.label}</dt>
+                    <dd class="font-display text-sm whitespace-nowrap text-mist-50">{row.price}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </article>
         ))
       }
@@ -88,16 +111,69 @@ import Icon from './Icon.astro';
 </section>
 
 <style>
-  summary::-webkit-details-marker {
-    display: none;
+  /* Панель прячется под нижним краем карточки и выезжает вверх */
+  .service-panel {
+    background: var(--color-ink-850);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(18%);
+    transition:
+      opacity 0.4s var(--ease-out-soft),
+      transform 0.5s var(--ease-out-soft),
+      visibility 0.5s;
   }
-  summary {
-    list-style: none;
+
+  .service-card[data-open='true'] .service-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
   }
-  .service-details[open] .summary-label {
-    color: var(--color-gold-400);
-  }
-  .service-details[open] summary svg {
+
+  .service-card[data-open='true'] .service-toggle-icon {
     rotate: 45deg;
   }
+
+  .service-card[data-open='true'] .service-toggle {
+    color: var(--color-gold-400);
+  }
+
+  /* Без JS подробности показываются по наведению — иначе они недоступны */
+  :root:not(.js) .service-card:hover .service-panel,
+  :root:not(.js) .service-card:focus-within .service-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
 </style>
+
+<script>
+  const grid = document.querySelector('.services-grid');
+
+  grid?.addEventListener('click', (event) => {
+    const target = event.target as Element | null;
+    const card = target?.closest<HTMLElement>('.service-card');
+    if (!card) return;
+
+    const toggle = target?.closest('.service-toggle');
+    const close = target?.closest('.service-close');
+    if (!toggle && !close) return;
+
+    const open = close ? false : card.dataset.open !== 'true';
+
+    // Раскрытой остаётся только одна карточка
+    grid.querySelectorAll<HTMLElement>('.service-card').forEach((other) => {
+      const isThis = other === card && open;
+      other.dataset.open = String(isThis);
+      other.querySelector('.service-toggle')?.setAttribute('aria-expanded', String(isThis));
+    });
+  });
+
+  // Esc закрывает раскрытую карточку
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    grid?.querySelectorAll<HTMLElement>('.service-card[data-open="true"]').forEach((card) => {
+      card.dataset.open = 'false';
+      card.querySelector('.service-toggle')?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>

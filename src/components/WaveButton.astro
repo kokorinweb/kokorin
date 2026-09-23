@@ -1,0 +1,143 @@
+---
+/**
+ * Кнопка, которую при наведении заливает «море»: волна поднимается
+ * снизу вверх, подписи меняются местами.
+ * По мотивам btn от SmookyDev с Uiverse, перекрашено в нашу палитру.
+ */
+interface Props {
+  href: string;
+  label: string;
+  hoverLabel: string;
+}
+const { href, label, hoverLabel } = Astro.props;
+---
+
+<a href={href} class="wave-btn" aria-label={label}>
+  <span class="wave-btn-face">
+    <span class="wave-btn-sea wave-btn-sea-back" aria-hidden="true"></span>
+    <span class="wave-btn-sea wave-btn-sea-front" aria-hidden="true"></span>
+
+    <span class="wave-btn-label wave-btn-label-top">{label}</span>
+    <span class="wave-btn-label wave-btn-label-bottom">{hoverLabel}</span>
+  </span>
+</a>
+
+<style>
+  .wave-btn {
+    display: inline-block;
+    border-radius: var(--radius-pill);
+    padding: 2px;
+    background: linear-gradient(100deg, var(--color-gold-400), var(--color-gold-600));
+    box-shadow: 0 14px 40px -20px rgb(240 180 41 / 0.6);
+    transition:
+      box-shadow 0.4s var(--ease-out-soft),
+      transform 0.4s var(--ease-out-soft);
+  }
+
+  .wave-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 48px -18px rgb(240 180 41 / 0.85);
+  }
+
+  .wave-btn-face {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: var(--color-ink-950);
+    padding: 0.9rem 2.6rem;
+    isolation: isolate;
+  }
+
+  /*
+   * Море — заливка, у которой волнистый верхний край задан маской.
+   * Два слоя с разной скоростью дают ощущение глубины.
+   */
+  .wave-btn-sea {
+    position: absolute;
+    inset-inline: -25%;
+    bottom: 0;
+    height: 150%;
+    z-index: 0;
+    pointer-events: none;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0 70 Q 150 10 300 70 T 600 70 T 900 70 T 1200 70 L1200 300 L0 300 Z'/%3E%3C/svg%3E");
+    mask-size: 50% 100%;
+    mask-repeat: repeat-x;
+    transition: transform 0.55s var(--ease-out-soft);
+  }
+
+  .wave-btn-sea-back {
+    background: linear-gradient(180deg, var(--color-gold-600), var(--color-gold-500));
+    opacity: 0.55;
+    transform: translateY(72%);
+    animation: wave-drift-back 5s ease-in-out infinite;
+  }
+
+  .wave-btn-sea-front {
+    background: linear-gradient(180deg, var(--color-gold-400), var(--color-gold-500));
+    transform: translateY(80%);
+    animation: wave-drift-front 4s ease-in-out infinite;
+  }
+
+  .wave-btn:hover .wave-btn-sea-back,
+  .wave-btn:hover .wave-btn-sea-front {
+    transform: translateY(0);
+    animation: none;
+  }
+
+  @keyframes wave-drift-back {
+    0%, 100% { transform: translateY(72%); }
+    50% { transform: translateY(66%); }
+  }
+
+  @keyframes wave-drift-front {
+    0%, 100% { transform: translateY(80%); }
+    50% { transform: translateY(74%); }
+  }
+
+  .wave-btn-label {
+    grid-area: 1 / 1;
+    z-index: 1;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition:
+      transform 0.35s var(--ease-out-soft),
+      opacity 0.3s var(--ease-out-soft);
+  }
+
+  .wave-btn-label-top {
+    color: var(--color-mist-50);
+  }
+
+  /* Нижняя подпись читается на залитом золотом фоне */
+  .wave-btn-label-bottom {
+    color: var(--color-ink-950);
+    transform: translateY(170%);
+    opacity: 0;
+  }
+
+  .wave-btn:hover .wave-btn-label-top {
+    transform: translateY(-170%);
+    opacity: 0;
+  }
+
+  .wave-btn:hover .wave-btn-label-bottom {
+    transform: none;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave-btn-sea {
+      animation: none;
+    }
+    .wave-btn:hover .wave-btn-sea-back,
+    .wave-btn:hover .wave-btn-sea-front,
+    .wave-btn:hover .wave-btn-label-top,
+    .wave-btn:hover .wave-btn-label-bottom {
+      transition: none;
+    }
+  }
+</style>
