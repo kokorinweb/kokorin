@@ -5,7 +5,10 @@ import Icon from './Icon.astro';
 ---
 
 <section id="pricing" class="relative overflow-clip py-24 sm:py-32">
-  <div class="aura top-1/4 left-1/2 size-[38rem] -translate-x-1/2 bg-gold-600/12" aria-hidden="true"></div>
+  <!-- Цветные пятна под стеклом: без них стекло нечему преломлять -->
+  <div class="aura top-1/4 left-[12%] size-[26rem] bg-gold-600/22" aria-hidden="true"></div>
+  <div class="aura top-1/2 right-[8%] size-[24rem] bg-violet-600/20" aria-hidden="true"></div>
+  <div class="aura bottom-10 left-1/2 size-[22rem] -translate-x-1/2 bg-gold-500/14" aria-hidden="true"></div>
 
   <div class="container-page relative">
     <SectionHead
@@ -15,22 +18,38 @@ import Icon from './Icon.astro';
       subtitle={pricing.subtitle}
     />
 
-    <!-- Ценники-бирки: корешок с номером слева, цена справа, между ними перфорация -->
-    <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {
         pricing.rows.map((row, i) => (
-          <article class="reveal ticket group" style={`--reveal-delay:${(i % 3) * 80}ms`}>
-            <div class="ticket-stub">
-              <span class="font-display text-xs tracking-[0.2em] text-gold-500">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-            </div>
+          <article
+            class:list={[
+              'reveal glass-card group',
+              i === pricing.rows.length - 1 && 'sm:col-span-2 lg:col-span-3',
+            ]}
+            style={`--reveal-delay:${(i % 3) * 80}ms`}
+          >
+            <span class="glass-sheen" aria-hidden="true" />
 
-            <div class="ticket-body">
-              <h3 class="text-lg leading-snug text-mist-50">{row.service}</h3>
-              <p class="mt-1.5 text-sm leading-relaxed text-mist-500">{row.note}</p>
+            <div
+              class:list={[
+                'relative flex h-full flex-col p-7',
+                i === pricing.rows.length - 1 && 'sm:flex-row sm:items-center sm:justify-between sm:gap-8',
+              ]}
+            >
+              <div class="flex flex-col">
+                <span class="font-display text-xs tracking-[0.22em] text-gold-400/80">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 class="mt-5 text-lg leading-snug text-mist-50">{row.service}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-mist-300">{row.note}</p>
+              </div>
 
-              <p class="mt-5 font-display text-3xl text-gold-500 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-0.5">
+              <p
+                class:list={[
+                  'font-display text-3xl text-transparent [background-image:linear-gradient(100deg,var(--color-mist-50),var(--color-gold-400))] bg-clip-text',
+                  i === pricing.rows.length - 1 ? 'mt-7 whitespace-nowrap sm:mt-0' : 'mt-auto pt-7',
+                ]}
+              >
                 {row.price}
               </p>
             </div>
@@ -53,75 +72,68 @@ import Icon from './Icon.astro';
 </section>
 
 <style>
-  .ticket {
-    --notch: 0.85rem;
-    --stub: 3.25rem;
-
+  .glass-card {
     position: relative;
-    display: grid;
-    grid-template-columns: var(--stub) 1fr;
-    border-radius: var(--radius-card);
-    background: linear-gradient(150deg, rgb(255 255 255 / 0.055), rgb(255 255 255 / 0.018));
+    overflow: hidden;
+    border-radius: 1.5rem;
+
+    /* Само стекло: размывает то, что под ним, и слегка поднимает насыщенность */
+    backdrop-filter: blur(22px) saturate(160%);
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03));
+
+    /* Кромка сверху светлее — как преломление на скошенном крае */
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.28),
+      inset 0 0 0 1px rgb(255 255 255 / 0.09),
+      inset 0 -18px 40px -30px rgb(255 255 255 / 0.4),
+      0 18px 40px -26px rgb(0 0 0 / 0.85);
+
     transition:
-      transform 0.5s var(--ease-out-soft),
-      background 0.5s var(--ease-out-soft);
-
-    /* Круглые вырезы сверху и снизу на линии отрыва — как у настоящего билета */
-    mask:
-      radial-gradient(var(--notch) at var(--stub) 0, transparent 99%, #000 100%) top / 100% 51% no-repeat,
-      radial-gradient(var(--notch) at var(--stub) 100%, transparent 99%, #000 100%) bottom / 100% 51% no-repeat;
+      transform 0.55s var(--ease-out-soft),
+      box-shadow 0.55s var(--ease-out-soft),
+      background 0.55s var(--ease-out-soft);
   }
 
-  .ticket:hover {
-    transform: translateY(-6px);
-    background: linear-gradient(150deg, rgb(240 180 41 / 0.1), rgb(255 255 255 / 0.02));
+  .glass-card:hover {
+    transform: translateY(-7px);
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.15), rgb(255 255 255 / 0.05));
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.4),
+      inset 0 0 0 1px rgb(240 180 41 / 0.22),
+      inset 0 -18px 40px -30px rgb(255 255 255 / 0.5),
+      0 26px 55px -26px rgb(0 0 0 / 0.9);
   }
 
-  /* Корешок с номером */
-  .ticket-stub {
-    display: grid;
-    place-items: center;
-    padding-block: 1.75rem;
-  }
-
-  .ticket-stub > span {
-    writing-mode: vertical-rl;
-    rotate: 180deg;
-  }
-
-  /* Линия отрыва */
-  .ticket-body {
-    position: relative;
-    padding: 1.75rem 1.75rem 1.75rem 1.5rem;
-  }
-
-  .ticket-body::before {
-    content: '';
+  /* Блик скользит по стеклу при наведении */
+  .glass-sheen {
     position: absolute;
-    top: var(--notch);
-    bottom: var(--notch);
-    left: 0;
-    width: 1px;
-    background-image: linear-gradient(
-      to bottom,
-      rgb(255 255 255 / 0.4) 0 7px,
-      transparent 7px 13px
+    top: -60%;
+    left: -75%;
+    z-index: 0;
+    width: 55%;
+    height: 220%;
+    rotate: 18deg;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.13),
+      rgb(255 255 255 / 0.03),
+      transparent
     );
-    background-size: 1px 13px;
-    transition: background-image 0.5s var(--ease-out-soft);
+    transition: translate 0.85s var(--ease-out-soft);
   }
 
-  .ticket:hover .ticket-body::before {
-    background-image: linear-gradient(
-      to bottom,
-      rgb(240 180 41 / 0.75) 0 6px,
-      transparent 6px 12px
-    );
+  .glass-card:hover .glass-sheen {
+    translate: 320% 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ticket:hover {
+    .glass-card:hover {
       transform: none;
+    }
+    .glass-card:hover .glass-sheen {
+      translate: 0;
     }
   }
 </style>
